@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
 }
 
 android {
@@ -13,8 +14,11 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+    dataBinding {
+        enable = true
+    }
     buildFeatures {
-        compose = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
@@ -45,4 +49,25 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.activity.compose)
     debugImplementation(libs.compose.ui.tooling)
+
+    implementation(libs.appcompat)
+    implementation(libs.coreKtx)
+    implementation(libs.maps)
+    implementation(libs.location)
+    implementation(libs.mpAndroidChart)
+    implementation(libs.navigationFragmentKtx)
+    implementation(libs.navigationUiKtx)
+    implementation(libs.androidToolbox) {
+        isTransitive = true
+    }
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.testRunner)
+    androidTestImplementation(libs.espressoCore)
+    implementation(libs.lifecycleExtensions)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
+    implementation(libs.circleProgressBar)
+    implementation(libs.lifecycleCompiler)
+    implementation(libs.lifecycleLivedataKtx)
+    implementation(libs.mpAndroidChart)
 }
