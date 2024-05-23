@@ -16,5 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.hyperether.getgoing_kmp.android.ui.activity.LocationActivity" />
+        <activity android:name="com.hyperether.getgoing_kmp.android.ui.activity.ShowDataActivity" />
     </application>
 </manifest> 
