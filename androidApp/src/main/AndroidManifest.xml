@@ -18,5 +18,9 @@
         </activity>
         <activity android:name="com.hyperether.getgoing_kmp.android.ui.activity.LocationActivity" />
         <activity android:name="com.hyperether.getgoing_kmp.android.ui.activity.ShowDataActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
 </manifest> 

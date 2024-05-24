@@ -8,11 +8,12 @@ android {
     namespace = "com.hyperether.getgoing_kmp.android"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.hyperether.getgoing_kmp.android"
+        applicationId = "com.hyperether.getgoing"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        manifestPlaceholders["mapsApiKey"] = project.findProperty("MAPS_API_KEY") ?: ""
     }
     dataBinding {
         enable = true
@@ -70,4 +71,5 @@ dependencies {
     implementation(libs.lifecycleCompiler)
     implementation(libs.lifecycleLivedataKtx)
     implementation(libs.mpAndroidChart)
+    implementation(libs.google.maps)
 }
