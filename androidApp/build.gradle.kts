@@ -8,11 +8,15 @@ android {
     namespace = "com.hyperether.getgoing_kmp.android"
     compileSdk = 34
     defaultConfig {
+        manifestPlaceholders += mapOf()
         applicationId = "com.hyperether.getgoing"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
         manifestPlaceholders["mapsApiKey"] = project.findProperty("MAPS_API_KEY") ?: ""
     }
     dataBinding {
@@ -20,6 +24,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
@@ -49,6 +54,11 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.graphics)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.appcompat)
@@ -72,4 +82,6 @@ dependencies {
     implementation(libs.lifecycleLivedataKtx)
     implementation(libs.mpAndroidChart)
     implementation(libs.google.maps)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.navigation.compose)
 }

@@ -6,7 +6,7 @@ import android.os.Handler
 import android.os.HandlerThread
 import com.hyperether.getgoing_kmp.di.AppContainer
 import com.hyperether.getgoing_kmp.di.Factory
-import com.hyperether.getgoing_kmp.repository.GgRepository
+import com.hyperether.getgoing_kmp.repository.GgRepositoryImpl
 
 class App : Application() {
     lateinit var appContainer: AppContainer
@@ -24,7 +24,7 @@ class App : Application() {
             return instance!!.applicationContext
         }
 
-        fun getRepository(): GgRepository {
+        fun getRepository(): GgRepositoryImpl {
             return instance!!.appContainer.appRepository
         }
 

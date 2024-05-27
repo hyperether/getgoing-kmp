@@ -5,34 +5,27 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RouteDao {
-    @Query("SELECT * from routes")
-    fun getAll(): Flow<List<Route>>
+    @Query("SELECT * FROM Route")
+    suspend fun all(): List<Route>
 
     @Insert
     suspend fun insertRoute(route: Route): Long
 
-    @Query("SELECT * FROM routes WHERE id = :id")
-    suspend fun getRouteById(id: Long): Route
-
-    @Query("SELECT * FROM routes WHERE id = :id")
-    fun getRouteByIdAsLiveData(id: Long): Flow<Route>?
+    @Query("SELECT * FROM Route WHERE id = :id")
+    suspend fun getRouteById(id: Long): Route?
 
     @Delete
     suspend fun deleteRoutes(vararg routes: Route)
 
-    @Query("DELETE FROM routes WHERE id = :id")
+    @Query("DELETE FROM Route WHERE id = :id")
     suspend fun deleteRouteById(id: Long)
 
-    @Query("SELECT * from routes ORDER BY id DESC LIMIT 1")
-    suspend fun getLast(): Route
+    @Query("SELECT * FROM Route WHERE goal > 0 ORDER BY id DESC LIMIT 1")
+    suspend fun latestRoute(): Route?
 
     @Update
     suspend fun updateRoute(route: Route)
-
-    @Query("SELECT * FROM routes WHERE goal > 0 ORDER BY id DESC LIMIT 1")
-    suspend fun getLatestRoute(): Route?
 }
