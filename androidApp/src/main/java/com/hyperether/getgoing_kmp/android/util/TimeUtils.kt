@@ -1,7 +1,7 @@
 package com.hyperether.getgoing_kmp.android.util
 
 import android.widget.Chronometer
-import com.hyperether.getgoing_kmp.Constants
+import com.hyperether.getgoing_kmp.util.Constants
 
 object TimeUtils {
     fun chronometerToMills(mChronometer: Chronometer): Long {

@@ -1,6 +1,6 @@
 package com.hyperether.getgoing_kmp.model
 
-import com.hyperether.getgoing_kmp.Constants
+import com.hyperether.getgoing_kmp.util.Constants
 
 data class CBDataFrame(
     var measurementSystemId: Int = Constants.METRIC,

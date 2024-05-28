@@ -1,10 +1,10 @@
 package com.hyperether.getgoing_kmp.android
 
 import android.content.SharedPreferences
-import com.hyperether.getgoing_kmp.Constants
-import com.hyperether.getgoing_kmp.Constants.PREF_RIDE_ROUTE_EXISTING
-import com.hyperether.getgoing_kmp.Constants.PREF_RUN_ROUTE_EXISTING
-import com.hyperether.getgoing_kmp.Constants.PREF_WALK_ROUTE_EXISTING
+import com.hyperether.getgoing_kmp.util.Constants
+import com.hyperether.getgoing_kmp.util.Constants.PREF_RIDE_ROUTE_EXISTING
+import com.hyperether.getgoing_kmp.util.Constants.PREF_RUN_ROUTE_EXISTING
+import com.hyperether.getgoing_kmp.util.Constants.PREF_WALK_ROUTE_EXISTING
 
 
 object SharedPref {

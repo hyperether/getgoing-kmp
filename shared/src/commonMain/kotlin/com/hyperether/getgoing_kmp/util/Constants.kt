@@ -1,4 +1,4 @@
-package com.hyperether.getgoing_kmp
+package com.hyperether.getgoing_kmp.util
 
 /**
  * Created by nikola on 10/07/17.
