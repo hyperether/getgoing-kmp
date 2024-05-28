@@ -75,7 +75,7 @@ fun EndlessListExercise(list: List<ExerciseType>, selected: (ExerciseType) -> Un
             Modifier
                 .size(100.dp)
                 .clip(CircleShape)
-                .background(color = MaterialTheme.colorScheme.primaryContainer)
+                .background(color = MaterialTheme.colorScheme.background)
         )
 
 
@@ -147,7 +147,7 @@ fun ShapedColumn(
                 }
                 drawPath(path = path, color = color, style = Fill)
             }
-            .padding(20.dp)
+            .padding(bottom = 20.dp)
 
     ) {
         content()

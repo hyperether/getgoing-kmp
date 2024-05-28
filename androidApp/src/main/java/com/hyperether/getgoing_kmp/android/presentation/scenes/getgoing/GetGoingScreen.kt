@@ -30,7 +30,7 @@ import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpThem
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
 
 @Composable
-fun GetGoingScreen(viewModel: GetGoingViewModel) {
+fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -79,7 +79,7 @@ fun GetGoingScreen(viewModel: GetGoingViewModel) {
         Text(text = viewModel.exerciseState.value)
 
         PrimaryButton("Get ready") {
-
+            start()
         }
     }
 }

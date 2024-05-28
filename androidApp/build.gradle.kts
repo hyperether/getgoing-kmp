@@ -84,4 +84,5 @@ dependencies {
     implementation(libs.google.maps)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.navigation.compose)
+    implementation(libs.compose.maps)
 }
