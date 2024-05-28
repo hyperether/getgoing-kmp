@@ -3,6 +3,7 @@ package com.hyperether.getgoing_kmp.android.presentation.ui.components
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,9 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,6 +47,26 @@ fun LastExercise() {
     )
 }
 
+@Composable
+fun CirceButtonContainer() {
+    Box(contentAlignment = Alignment.Center) {
+        Box(
+            Modifier
+                .size(115.dp)
+                .clip(CircleShape)
+                .background(color = MaterialTheme.colorScheme.surfaceContainerLowest)
+        )
+
+        Box(
+            Modifier
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(color = MaterialTheme.colorScheme.surfaceContainerLow)
+        )
+    }
+
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun EndlessListExercise(list: List<ExerciseType>, selected: (ExerciseType) -> Unit) {
@@ -55,29 +74,16 @@ fun EndlessListExercise(list: List<ExerciseType>, selected: (ExerciseType) -> Un
         modifier = Modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
-        val pagerState = rememberPagerState(pageCount = { 200 })
+        val pagerState = rememberPagerState(pageCount = { 50 })
         var scrolled by remember {
             mutableStateOf(false)
         }
         LaunchedEffect(key1 = true) {
-            pagerState.scrollToPage(101)
+            pagerState.scrollToPage(24)
             scrolled = true
         }
 
-        Box(
-            Modifier
-                .size(115.dp)
-                .clip(CircleShape)
-                .background(color = MaterialTheme.colorScheme.background)
-        )
-
-        Box(
-            Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(color = MaterialTheme.colorScheme.background)
-        )
-
+        CirceButtonContainer()
 
         CompositionLocalProvider(LocalOverscrollConfiguration provides null) {
             HorizontalPager(
@@ -119,36 +125,19 @@ fun EndlessListExercise(list: List<ExerciseType>, selected: (ExerciseType) -> Un
 
 @Composable
 fun ShapedColumn(
+    modifier: Modifier,
+    verticalArrangement: Arrangement.Vertical,
     color: Color = MaterialTheme.colorScheme.primaryContainer,
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .drawBehind {
-                val path = Path().apply {
-                    drawRect(color, size = Size(size.width, size.height - 70f))
-                    moveTo(size.width / 4, size.height - 72f)
-//                    lineTo(size.width / 2, size.height)
-//                    lineTo(size.width - size.width / 4, size.height - 72)
-                    cubicTo(
-                        size.width / 2 - 100, size.height - 50,
-                        size.width / 2 - 160, size.height - 30,
-                        size.width / 2, size.height
-                    )
-                    cubicTo(
-                        size.width - size.width / 2 + 160,
-                        size.height - 30,
-                        size.width - size.width / 2 + 100,
-                        size.height - 50,
-                        size.width - size.width / 4,
-                        size.height - 72
-                    )
-                    close()
-                }
+                val path = generateGGPath(size)
                 drawPath(path = path, color = color, style = Fill)
             }
-            .padding(bottom = 20.dp)
-
+            .padding(bottom = 20.dp),
+        verticalArrangement = verticalArrangement
     ) {
         content()
     }
@@ -165,7 +154,7 @@ private fun ContainerComponentsPreview() {
                 {}
             )
 
-            ShapedColumn {
+            ShapedColumn(Modifier, Arrangement.SpaceBetween) {
                 Box(modifier = Modifier.size(300.dp))
             }
         }

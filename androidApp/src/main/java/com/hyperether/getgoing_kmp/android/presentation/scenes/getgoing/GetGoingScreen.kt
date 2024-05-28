@@ -37,7 +37,7 @@ fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ShapedColumn {
+        ShapedColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.SpaceBetween) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -58,9 +58,6 @@ fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
 
             LastExercise()
 
-            Spacer(modifier = Modifier.height(50.dp))
-
-            Spacer(modifier = Modifier.height(100.dp))
 
             Column {
                 BoldLargeText(text = "Choose your exercise")
@@ -76,11 +73,19 @@ fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
 
         }
 
-        Text(text = viewModel.exerciseState.value)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = viewModel.exerciseState.value)
 
-        PrimaryButton("Get ready") {
-            start()
+            PrimaryButton("Get ready") {
+                start()
+            }
         }
+
     }
 }
 

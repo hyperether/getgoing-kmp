@@ -16,6 +16,43 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 
+fun generateGGPath(size: Size) = Path().apply {
+    moveTo(size.width / 4, size.height - 72f)
+    cubicTo(
+        size.width / 2 - 100, size.height - 50,
+        size.width / 2 - 160, size.height - 30,
+        size.width / 2, size.height
+    )
+    cubicTo(
+        size.width - size.width / 2 + 160,
+        size.height - 30,
+        size.width - size.width / 2 + 100,
+        size.height - 50,
+        size.width - size.width / 4,
+        size.height - 72
+    )
+    lineTo(
+        size.width,
+        size.height - 72
+    )
+
+    lineTo(
+        size.width,
+        0f
+    )
+
+    lineTo(
+        0f,
+        0f
+    )
+    lineTo(
+        0f,
+        size.height - 72
+    )
+    lineTo(size.width / 4, size.height - 72f)
+    close()
+}
+
 class GGShape : Shape {
 
     override fun createOutline(
@@ -24,43 +61,7 @@ class GGShape : Shape {
         density: Density
     ): Outline {
         return Outline.Generic(
-            // Draw your custom path here
-            path = Path().apply {
-                moveTo(size.width / 4, size.height - 72f)
-                cubicTo(
-                    size.width / 2 - 100, size.height - 50,
-                    size.width / 2 - 160, size.height - 30,
-                    size.width / 2, size.height
-                )
-                cubicTo(
-                    size.width - size.width / 2 + 160,
-                    size.height - 30,
-                    size.width - size.width / 2 + 100,
-                    size.height - 50,
-                    size.width - size.width / 4,
-                    size.height - 72
-                )
-                lineTo(
-                    size.width,
-                    size.height - 72
-                )
-
-                lineTo(
-                    size.width,
-                    0f
-                )
-
-                lineTo(
-                    0f,
-                    0f
-                )
-                lineTo(
-                    0f,
-                    size.height - 72
-                )
-                lineTo(size.width / 4, size.height - 72f)
-                close()
-            }
+            path = generateGGPath(size)
         )
     }
 }
@@ -69,8 +70,10 @@ class GGShape : Shape {
 @Composable
 private fun PreviewShape() {
     Color.Red
-    Box(modifier = Modifier
-        .size(300.dp)
-        .clip(GGShape())
-        .background(Color.Red))
+    Box(
+        modifier = Modifier
+            .size(300.dp)
+            .clip(GGShape())
+            .background(Color.Red)
+    )
 }
