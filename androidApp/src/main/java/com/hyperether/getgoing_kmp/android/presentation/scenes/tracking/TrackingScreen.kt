@@ -11,13 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.CirceButtonContainer
@@ -52,8 +53,27 @@ fun TrackingScreen(viewModel: TrackingViewModel) {
                 cameraPositionState = cameraPositionState,
                 modifier = Modifier.fillMaxSize(),
                 properties = MapProperties(isMyLocationEnabled = true),
-                uiSettings = MapUiSettings(zoomControlsEnabled = false, myLocationButtonEnabled = false)
+                uiSettings = MapUiSettings(
+                    zoomControlsEnabled = false,
+                    myLocationButtonEnabled = false
+                )
             ) {
+
+                Polyline(
+                    points = viewModel.listOfGreenPoly, color = Color.Green
+                )
+
+                Polyline(
+                    points = viewModel.listOfYellowPoly, color = Color.Yellow
+                )
+
+                Polyline(
+                    points = viewModel.listOfOrangePoly, color = Color(255, 128, 0)
+                )
+
+                Polyline(
+                    points = viewModel.listOfRedPoly, color = Color.Red
+                )
 
             }
 

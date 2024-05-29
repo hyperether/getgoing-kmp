@@ -3,6 +3,7 @@ package com.hyperether.getgoing_kmp.repository
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.Route
 import com.hyperether.getgoing_kmp.repository.room.RouteAddedCallback
+import kotlinx.coroutines.flow.Flow
 
 interface GgRepository {
     suspend fun daoInsertNode(node: Node)
@@ -18,4 +19,5 @@ interface GgRepository {
     suspend fun getLastRoute(): Route?
     suspend fun markLastNode()
     suspend fun updateRouteDuration(id: Long, duration: Long)
+    suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>>
 }

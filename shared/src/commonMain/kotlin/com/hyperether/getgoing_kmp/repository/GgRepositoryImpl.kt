@@ -8,6 +8,7 @@ import com.hyperether.getgoing_kmp.repository.room.RouteAddedCallback
 import com.hyperether.getgoing_kmp.repository.room.RouteDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 
@@ -117,5 +118,9 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase): GgRepository {
                 routeDao.updateRoute(it)
             }
         }
+    }
+
+    override suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>> {
+        return nodeDao.getAllNodesByIdFlow(id)
     }
 }
