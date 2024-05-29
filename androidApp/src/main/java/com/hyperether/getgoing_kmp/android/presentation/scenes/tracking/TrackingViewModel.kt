@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Looper
 import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,10 +36,10 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     val formatter = SimpleDateFormat("dd.MM.yyyy.' 'HH:mm:ss", Locale.ENGLISH)
 
     var locationState = mutableStateOf(LatLng(0.0, 0.0))
-    val listOfGreenPoly = mutableStateListOf<LatLng>()
-    val listOfYellowPoly = mutableStateListOf<LatLng>()
-    val listOfOrangePoly = mutableStateListOf<LatLng>()
-    val listOfRedPoly = mutableStateListOf<LatLng>()
+    val listOfGreenPoly = mutableStateOf(listOf<LatLng>())
+    val listOfYellowPoly = mutableStateOf(listOf<LatLng>())
+    val listOfOrangePoly = mutableStateOf(listOf<LatLng>())
+    val listOfRedPoly = mutableStateOf(listOf<LatLng>())
 
     init {
         viewModelScope.launch {
@@ -58,7 +57,6 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     locationState.value = LatLng(location.latitude, location.longitude)
-                    listOfGreenPoly.add(LatLng(location.latitude, location.longitude))
                     Log.d(
                         "MainActivity",
                         ("Location: " + location.latitude).toString() + ", " + location.longitude
@@ -107,8 +105,8 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
 
     private suspend fun startObserving() {
         repository.getAllNodesByIdFlow(routeId).collect {
-            Log.d("TrackingViewModel" ,"FlowCollected")
-            Log.d("list data" ,"List: $it")
+            Log.d("TrackingViewModel", "FlowCollected")
+            Log.d("list data", "List: $it")
             drawRoute(it)
         }
     }
@@ -119,6 +117,13 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
         var drFirstPass = true
         var firstNode: Node? = null
         var secondNode: Node? = null
+
+        val data = NodeLists(
+            mutableListOf<LatLng>(),
+            mutableListOf<LatLng>(),
+            mutableListOf<LatLng>(),
+            mutableListOf<LatLng>()
+        )
 
         // Redraw the whole route
         val it = mRoute.iterator()
@@ -135,27 +140,35 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
                 Log.i("LAST", "${firstNode.isLast}")
                 continue
             }
-            drawSegment(firstNode!!, secondNode!!)
+            drawSegment(firstNode!!, secondNode!!, data)
         }
+        listOfGreenPoly.value = data.listOfGreenPoly
+        listOfYellowPoly.value = data.listOfYellowPoly
+        listOfOrangePoly.value = data.listOfOrangePoly
+        listOfRedPoly.value = data.listOfRedPoly
     }
 
 
-    private fun drawSegment(firstNode: Node, secondNode: Node) {
-        // Different speed spans are represented with different colors: green, yellow, orange, red
-
+    private fun drawSegment(firstNode: Node, secondNode: Node, data: NodeLists) {
         if (secondNode.velocity <= 1) {
-            // Drawing the route.
-            listOfGreenPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
-            listOfGreenPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
+            data.listOfGreenPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
+            data.listOfGreenPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
         } else if ((secondNode.velocity > 1) && (secondNode.velocity <= 2)) {
-            listOfYellowPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
-            listOfYellowPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
+            data.listOfYellowPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
+            data.listOfYellowPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
         } else if ((secondNode.velocity > 2) && (secondNode.velocity <= 3)) {
-            listOfOrangePoly.add(LatLng(firstNode.latitude, firstNode.longitude))
-            listOfOrangePoly.add(LatLng(secondNode.latitude, secondNode.longitude))
+            data.listOfOrangePoly.add(LatLng(firstNode.latitude, firstNode.longitude))
+            data.listOfOrangePoly.add(LatLng(secondNode.latitude, secondNode.longitude))
         } else {
-            listOfRedPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
-            listOfRedPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
+            data.listOfRedPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
+            data.listOfRedPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
         }
     }
 }
+
+data class NodeLists(
+    val listOfGreenPoly: MutableList<LatLng>,
+    val listOfYellowPoly: MutableList<LatLng>,
+    val listOfOrangePoly: MutableList<LatLng>,
+    val listOfRedPoly: MutableList<LatLng>
+)

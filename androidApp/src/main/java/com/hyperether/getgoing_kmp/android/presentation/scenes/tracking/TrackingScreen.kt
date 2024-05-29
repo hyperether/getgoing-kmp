@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
@@ -41,7 +43,7 @@ fun TrackingScreen(viewModel: TrackingViewModel) {
         val cameraPositionState = rememberCameraPositionState()
         viewModel.locationState.value.let {
             Log.d("asdas", "update location $it")
-            cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 15f)
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 20f)
         }
         Box(
             Modifier
@@ -60,19 +62,19 @@ fun TrackingScreen(viewModel: TrackingViewModel) {
             ) {
 
                 Polyline(
-                    points = viewModel.listOfGreenPoly, color = Color.Green
+                    points = viewModel.listOfGreenPoly.value, color = Color.Green
                 )
 
                 Polyline(
-                    points = viewModel.listOfYellowPoly, color = Color.Yellow
+                    points = viewModel.listOfYellowPoly.value, color = Color.Yellow
                 )
 
                 Polyline(
-                    points = viewModel.listOfOrangePoly, color = Color(255, 128, 0)
+                    points = viewModel.listOfOrangePoly.value, color = Color(255, 128, 0)
                 )
 
                 Polyline(
-                    points = viewModel.listOfRedPoly, color = Color.Red
+                    points = viewModel.listOfRedPoly.value, color = Color.Red
                 )
 
             }
