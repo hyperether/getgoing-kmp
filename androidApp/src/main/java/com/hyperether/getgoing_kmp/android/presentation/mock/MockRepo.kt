@@ -1,5 +1,7 @@
 package com.hyperether.getgoing_kmp.android.presentation.mock
 
+import com.hyperether.getgoing_kmp.model.User
+import com.hyperether.getgoing_kmp.model.UserGender
 import com.hyperether.getgoing_kmp.repository.GgRepository
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.Route
@@ -64,5 +66,27 @@ class MockRepo : GgRepository {
     override suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>> {
 
         return MutableStateFlow(listOf())
+    }
+
+    override suspend fun insertUser(user: User): Long {
+        return 0L
+    }
+
+    override suspend fun updateUser(user: User) {
+
+    }
+
+    override suspend fun getUser(userId: Long): Flow<User?> {
+        return MutableStateFlow(
+            User(
+                id = 0,
+                gender = UserGender.Male,
+                age = 1,
+                height = 110,
+                weight = 40,
+                totalKm = 0.00,
+                totalKcal = 0
+            )
+        )
     }
 }
