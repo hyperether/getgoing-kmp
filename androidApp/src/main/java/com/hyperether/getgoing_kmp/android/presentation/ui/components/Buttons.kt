@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
@@ -18,10 +19,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hyperether.getgoing_kmp.android.R
 
 @Composable
 fun ButtonTextIcon(text: String, icon: ImageVector? = null, click: () -> Unit = {}) {
@@ -62,12 +65,53 @@ fun PrimaryButton(text: String, click: () -> Unit) {
 
 @Composable
 fun PlayButton(isRunning: Boolean = false, click: () -> Unit) {
-    IconButton(onClick = { click() }, Modifier.size(100.dp).padding(1.dp)) {
+    IconButton(onClick = { click() },
+        Modifier
+            .size(100.dp)
+            .padding(1.dp)) {
         Icon(
             modifier = Modifier.size(100.dp),
             imageVector = if (isRunning) Icons.Filled.Clear else Icons.Filled.PlayArrow,
             contentDescription = "Play button",
             tint = MaterialTheme.colorScheme.primary
         )
+    }
+}
+
+@Composable
+fun BackButton(onNavigateBack: () -> Unit) {
+    IconButton(
+        modifier = Modifier
+            .size(60.dp)
+            .padding(bottom = 1.dp),
+        onClick = { onNavigateBack() }) {
+        Icon(
+            modifier = Modifier.size(30.dp),
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = stringResource(id = R.string.back),
+            tint = MaterialTheme.colorScheme.onBackground
+        )
+    }
+}
+
+@Composable
+fun ConfirmButton(onClick: () -> Unit) {
+    TextButton(
+        onClick = {
+            onClick()
+        }
+    ) {
+        Text("Confirm")
+    }
+}
+
+@Composable
+fun DismissButton(onClick: () -> Unit) {
+    TextButton(
+        onClick = {
+            onClick()
+        }
+    ) {
+        Text("Cancel")
     }
 }
