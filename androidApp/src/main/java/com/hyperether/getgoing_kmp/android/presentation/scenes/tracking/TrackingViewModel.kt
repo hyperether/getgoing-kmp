@@ -15,6 +15,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.hyperether.getgoing_kmp.android.App
 import com.hyperether.getgoing_kmp.android.location.GGLocationService
+import com.hyperether.getgoing_kmp.android.util.Conversion
 import com.hyperether.getgoing_kmp.repository.GgRepository
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.Route
@@ -23,6 +24,9 @@ import com.hyperether.getgoing_kmp.util.Constants
 import com.hyperether.toolbox.location.HyperLocationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -35,16 +39,29 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     //todo move to utils
     val formatter = SimpleDateFormat("dd.MM.yyyy.' 'HH:mm:ss", Locale.ENGLISH)
 
+    private var timerScope = CoroutineScope(Dispatchers.Main + Job())
+    private var timeInt = 0L
+
     var locationState = mutableStateOf(LatLng(0.0, 0.0))
     val listOfGreenPoly = mutableStateOf(listOf<LatLng>())
     val listOfYellowPoly = mutableStateOf(listOf<LatLng>())
     val listOfOrangePoly = mutableStateOf(listOf<LatLng>())
     val listOfRedPoly = mutableStateOf(listOf<LatLng>())
 
+    val durationState = mutableStateOf("")
+    val caloriesState = mutableStateOf("")
+    val distanceState = mutableStateOf("")
+    val velocityState = mutableStateOf("")
+
     init {
         viewModelScope.launch {
             startLocationUpdates()
         }
+
+        caloriesState.value = String.format("%.02f kcal", 0.0)
+        distanceState.value = String.format("%.02f m", 0.0)
+        velocityState.value = String.format("%.02f m/s", 0.0)
+        durationState.value = Conversion.getDurationString(0L)
     }
 
     fun startLocationUpdates() {
@@ -96,19 +113,45 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
                     intent.putExtra(HyperLocationService.LOC_DISTANCE, Constants.LOCATION_DISTANCE)
                     App.appCtxt().startService(intent)
                     CoroutineScope(Dispatchers.IO).launch {
-                        startObserving()
+                        startObservingNodes()
                     }
+                    CoroutineScope(Dispatchers.IO).launch {
+                        startObservingRoute()
+                    }
+                    startTimer()
                 }
             })
         }
     }
 
-    private suspend fun startObserving() {
+    private suspend fun startObservingNodes() {
         repository.getAllNodesByIdFlow(routeId).collect {
             Log.d("TrackingViewModel", "FlowCollected")
             Log.d("list data", "List: $it")
             drawRoute(it)
         }
+    }
+
+    private suspend fun startObservingRoute() {
+        repository.getRouteByIdFlow(routeId).collect {
+            caloriesState.value = String.format("%.02f kcal", it.energy)
+            distanceState.value = String.format("%.02f m", it.length)
+            velocityState.value = String.format("%.02f m/s", it.currentSpeed)
+        }
+    }
+
+    private fun startTimer() {
+        timerScope.launch {
+            while (true) {
+                delay(1000L)
+                timeInt++
+                durationState.value = Conversion.getDurationString(timeInt)
+            }
+        }
+    }
+
+    private fun cancelTimer() {
+        timerScope.cancel()
     }
 
     private fun drawRoute(mRoute: List<Node>?) {

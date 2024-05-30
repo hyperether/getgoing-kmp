@@ -76,7 +76,7 @@ fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(150.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = viewModel.exerciseState.value)

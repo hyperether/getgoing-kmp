@@ -6,6 +6,7 @@ import com.hyperether.getgoing_kmp.repository.room.Route
 import com.hyperether.getgoing_kmp.repository.room.RouteAddedCallback
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.util.Date
 
 class MockRepo : GgRepository {
     override suspend fun daoInsertNode(node: Node) {
@@ -64,5 +65,9 @@ class MockRepo : GgRepository {
     override suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>> {
 
         return MutableStateFlow(listOf())
+    }
+
+    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
+        return MutableStateFlow(Route(0, 0, 0.0, 0.0, "", 0.0, 0.0, 0, 2000))
     }
 }

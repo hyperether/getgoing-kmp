@@ -123,4 +123,8 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase): GgRepository {
     override suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>> {
         return nodeDao.getAllNodesByIdFlow(id)
     }
+
+    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
+        return routeDao.getRouteByIdFlow(id)
+    }
 }

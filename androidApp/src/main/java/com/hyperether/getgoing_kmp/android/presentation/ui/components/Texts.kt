@@ -15,3 +15,11 @@ fun BoldLargeText(text: String, color: Color = MaterialTheme.colorScheme.onBackg
         style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp)
     )
 }
+
+@Composable
+fun LargeText(text: String, color: Color = MaterialTheme.colorScheme.tertiary) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 20.sp)
+    )
+}

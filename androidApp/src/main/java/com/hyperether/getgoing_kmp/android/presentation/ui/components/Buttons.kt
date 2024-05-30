@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
@@ -62,12 +63,28 @@ fun PrimaryButton(text: String, click: () -> Unit) {
 
 @Composable
 fun PlayButton(isRunning: Boolean = false, click: () -> Unit) {
-    IconButton(onClick = { click() }, Modifier.size(100.dp).padding(1.dp)) {
+    IconButton(
+        onClick = { click() },
+        Modifier
+            .size(100.dp)
+            .padding(1.dp)
+    ) {
         Icon(
             modifier = Modifier.size(100.dp),
             imageVector = if (isRunning) Icons.Filled.Clear else Icons.Filled.PlayArrow,
             contentDescription = "Play button",
             tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+fun BackButton(click: () -> Unit) {
+    IconButton(onClick = { click() }) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = "Back image",
+            tint = MaterialTheme.colorScheme.tertiary
         )
     }
 }

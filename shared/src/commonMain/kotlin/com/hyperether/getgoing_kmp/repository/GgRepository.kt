@@ -20,4 +20,5 @@ interface GgRepository {
     suspend fun markLastNode()
     suspend fun updateRouteDuration(id: Long, duration: Long)
     suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>>
+    suspend fun getRouteByIdFlow(id: Long): Flow<Route>
 }
