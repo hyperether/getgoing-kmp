@@ -9,8 +9,14 @@ import com.hyperether.getgoing_kmp.repository.GgRepository
 class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : ViewModel() {
 
     val exerciseState = mutableStateOf<String>("")
+    private var selectedExercise = ExerciseType.WALKING
 
     fun selectExercise(exercise: ExerciseType) {
+        selectedExercise = exercise
         exerciseState.value = exercise.value
+    }
+
+    fun getSelectedExerciseId(): Int {
+        return selectedExercise.id
     }
 }

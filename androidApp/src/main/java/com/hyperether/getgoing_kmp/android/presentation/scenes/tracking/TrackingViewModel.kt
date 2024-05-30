@@ -16,6 +16,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.hyperether.getgoing_kmp.android.App
 import com.hyperether.getgoing_kmp.android.location.GGLocationService
 import com.hyperether.getgoing_kmp.android.util.Conversion
+import com.hyperether.getgoing_kmp.android.util.ExerciseType
 import com.hyperether.getgoing_kmp.repository.GgRepository
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.Route
@@ -54,6 +55,8 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     val caloriesState = mutableStateOf("")
     val distanceState = mutableStateOf("")
     val velocityState = mutableStateOf("")
+
+    val selectedExercise = mutableStateOf("")
 
     init {
         viewModelScope.launch {
@@ -97,7 +100,10 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
         trackingStarted.value = true
         if (routeId.toInt() == -1) {
             viewModelScope.launch {
-                val route = Route(0, 0, 0.0, 0.0, formatter.format(Date()), 0.0, 0.0, 0, 2000)
+                val activityId =
+                    ExerciseType.entries.find { it.value == selectedExercise.value }?.id ?: 0
+                val route =
+                    Route(0, 0, 0.0, 0.0, formatter.format(Date()), 0.0, 0.0, activityId, 2000)
                 repository.insertRoute(route, object : RouteAddedCallback {
                     override fun onRouteAdded(id: Long) {
                         routeId = id
@@ -226,6 +232,10 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
             data.listOfRedPoly.add(LatLng(firstNode.latitude, firstNode.longitude))
             data.listOfRedPoly.add(LatLng(secondNode.latitude, secondNode.longitude))
         }
+    }
+
+    fun setExercise(id: Int) {
+        selectedExercise.value = ExerciseType.entries.find { it.id == id }?.value ?: ""
     }
 }
 

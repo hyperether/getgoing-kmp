@@ -48,7 +48,7 @@ fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
             BackButton {
                 onBack()
             }
-            LargeText(text = "Running")
+            LargeText(text = viewModel.selectedExercise.value)
         }
         Box(
             Modifier
