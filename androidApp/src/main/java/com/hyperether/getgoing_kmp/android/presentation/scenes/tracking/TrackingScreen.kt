@@ -1,6 +1,5 @@
 package com.hyperether.getgoing_kmp.android.presentation.scenes.tracking
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,11 +34,10 @@ import com.hyperether.getgoing_kmp.android.presentation.ui.components.PlayButton
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
 
 @Composable
-fun TrackingScreen(viewModel: TrackingViewModel) {
+fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState()
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,7 +45,9 @@ fun TrackingScreen(viewModel: TrackingViewModel) {
                 .background(color = MaterialTheme.colorScheme.background),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BackButton {}
+            BackButton {
+                onBack()
+            }
             LargeText(text = "Running")
         }
         Box(
@@ -57,7 +57,6 @@ fun TrackingScreen(viewModel: TrackingViewModel) {
             contentAlignment = Alignment.BottomCenter
         ) {
             viewModel.locationState.value.let {
-                Log.d("asdas", "update location $it")
                 cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 20f)
             }
 
@@ -91,8 +90,12 @@ fun TrackingScreen(viewModel: TrackingViewModel) {
 
             Box(modifier = Modifier.padding(bottom = 20.dp), contentAlignment = Alignment.Center) {
                 CirceButtonContainer()
-                PlayButton {
-                    viewModel.startTracking()
+                PlayButton(viewModel.trackingStarted.value) {
+                    if (!viewModel.trackingStarted.value)
+                        viewModel.startTracking()
+                    else {
+                        viewModel.stopTracking()
+                    }
                 }
             }
         }

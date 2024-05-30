@@ -36,10 +36,12 @@ import java.util.Locale
 @SuppressLint("MissingPermission")
 class TrackingViewModel(val repository: GgRepository = App.getRepository()) : ViewModel() {
 
+    val trackingStarted = mutableStateOf(false)
+
     //todo move to utils
     val formatter = SimpleDateFormat("dd.MM.yyyy.' 'HH:mm:ss", Locale.ENGLISH)
 
-    private var timerScope = CoroutineScope(Dispatchers.Main + Job())
+    private var timerScope = CoroutineScope(Dispatchers.IO + Job())
     private var timeInt = 0L
 
     var locationState = mutableStateOf(LatLng(0.0, 0.0))
@@ -74,10 +76,6 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     locationState.value = LatLng(location.latitude, location.longitude)
-                    Log.d(
-                        "MainActivity",
-                        ("Location: " + location.latitude).toString() + ", " + location.longitude
-                    )
                 }
             }
         }
@@ -96,38 +94,57 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
 
     var routeId = -1L
     fun startTracking() {
-        viewModelScope.launch {
-            val route = Route(0, 0, 0.0, 0.0, formatter.format(Date()), 0.0, 0.0, 0, 2000)
-            repository.insertRoute(route, object : RouteAddedCallback {
-                override fun onRouteAdded(id: Long) {
-                    routeId = id
-                    val intent = Intent(
-                        App.appCtxt(),
-                        GGLocationService::class.java
-                    )
-                    intent.putExtra(HyperLocationService.LOC_INTERVAL, Constants.UPDATE_INTERVAL)
-                    intent.putExtra(
-                        HyperLocationService.LOC_FASTEST_INTERVAL,
-                        Constants.FASTEST_INTERVAL
-                    )
-                    intent.putExtra(HyperLocationService.LOC_DISTANCE, Constants.LOCATION_DISTANCE)
-                    App.appCtxt().startService(intent)
-                    CoroutineScope(Dispatchers.IO).launch {
-                        startObservingNodes()
+        trackingStarted.value = true
+        if (routeId.toInt() == -1) {
+            viewModelScope.launch {
+                val route = Route(0, 0, 0.0, 0.0, formatter.format(Date()), 0.0, 0.0, 0, 2000)
+                repository.insertRoute(route, object : RouteAddedCallback {
+                    override fun onRouteAdded(id: Long) {
+                        routeId = id
+                        startServiceAndTimer()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            startObservingNodes()
+                        }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            startObservingRoute()
+                        }
                     }
-                    CoroutineScope(Dispatchers.IO).launch {
-                        startObservingRoute()
-                    }
-                    startTimer()
-                }
-            })
+                })
+            }
+        } else {
+            startServiceAndTimer()
         }
+    }
+
+    private fun startServiceAndTimer() {
+        val intent = Intent(
+            App.appCtxt(),
+            GGLocationService::class.java
+        )
+        intent.putExtra(
+            HyperLocationService.LOC_INTERVAL,
+            Constants.UPDATE_INTERVAL
+        )
+        intent.putExtra(
+            HyperLocationService.LOC_FASTEST_INTERVAL,
+            Constants.FASTEST_INTERVAL
+        )
+        intent.putExtra(
+            HyperLocationService.LOC_DISTANCE,
+            Constants.LOCATION_DISTANCE
+        )
+        App.appCtxt().startService(intent)
+        startTimer()
+    }
+
+    fun stopTracking() {
+        trackingStarted.value = false
+        cancelTimer()
+        App.appCtxt().stopService(Intent(App.appCtxt(), GGLocationService::class.java))
     }
 
     private suspend fun startObservingNodes() {
         repository.getAllNodesByIdFlow(routeId).collect {
-            Log.d("TrackingViewModel", "FlowCollected")
-            Log.d("list data", "List: $it")
             drawRoute(it)
         }
     }
@@ -141,6 +158,8 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     }
 
     private fun startTimer() {
+        Log.d("Start timer", "start")
+        timerScope = CoroutineScope(Dispatchers.IO + Job())
         timerScope.launch {
             while (true) {
                 delay(1000L)
@@ -151,6 +170,7 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     }
 
     private fun cancelTimer() {
+        Log.d("Start timer", "stop")
         timerScope.cancel()
     }
 

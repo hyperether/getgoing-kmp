@@ -23,7 +23,9 @@ fun NavGraph(navController: NavHostController) {
 
         composable(route = Screen.TrackingScreen.route) {
             val viewModel: TrackingViewModel = viewModel()
-            TrackingScreen(viewModel = viewModel)
+            TrackingScreen(viewModel = viewModel) {
+                navController.popBackStack()
+            }
         }
 
     }
