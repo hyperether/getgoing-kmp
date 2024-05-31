@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -32,10 +34,52 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
+
+
+@Composable
+fun AppToolbar(
+    titleId: Int,
+    onNavigateBack: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BackButton {
+            onNavigateBack()
+        }
+
+        Text(
+            text = stringResource(id = titleId),
+            style = MaterialTheme.typography.headlineMedium,
+        )
+    }
+}
+
+@Composable
+fun AppToolbarDynamic(
+    title: String,
+    onNavigateBack: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BackButton {
+            onNavigateBack()
+        }
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+        )
+    }
+}
 
 @Composable
 fun LastExercise() {

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Slobodan on 7/11/2017.
@@ -27,4 +28,7 @@ interface NodeDao {
 
     @Update
     suspend fun update(node: Node)
+
+    @Query("SELECT * FROM Node WHERE routeId = :id")
+    fun getAllNodesByIdFlow(id: Long): Flow<List<Node>>
 }

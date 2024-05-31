@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RouteDao {
@@ -28,4 +29,7 @@ interface RouteDao {
 
     @Update
     suspend fun updateRoute(route: Route)
+
+    @Query("SELECT * FROM Route WHERE id = :id")
+    fun getRouteByIdFlow(id: Long): Flow<Route>
 }

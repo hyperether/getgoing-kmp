@@ -7,10 +7,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 
 
-@Database(entities = [Node::class, Route::class], version = 1)
+@Database(entities = [Node::class, Route::class, UserEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun nodeDao(): NodeDao
     abstract fun routeDao(): RouteDao
+    abstract fun userDao(): UserDao
 }
 
 fun getRoomDatabase(
