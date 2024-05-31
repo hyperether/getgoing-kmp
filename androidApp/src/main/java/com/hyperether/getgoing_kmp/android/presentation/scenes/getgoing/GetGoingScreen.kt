@@ -33,8 +33,9 @@ import com.hyperether.getgoing_kmp.android.util.ExerciseType
 @Composable
 fun GetGoingScreen(
     viewModel: GetGoingViewModel,
+    start: (Int) -> Unit = {},
     navigateTo: (String) -> Unit = {}
-) {
+    ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
@@ -85,13 +86,13 @@ fun GetGoingScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .height(150.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = viewModel.exerciseState.value)
 
             PrimaryButton("Get ready") {
-                navigateTo(Screen.TrackingScreen.route)
+                start(viewModel.getSelectedExerciseId())
             }
         }
 

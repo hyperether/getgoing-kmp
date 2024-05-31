@@ -21,14 +21,21 @@ fun NavGraph(navController: NavHostController) {
 
         composable(route = Screen.GetGoingScreen.route) {
             val viewModel: GetGoingViewModel = viewModel()
-            GetGoingScreen(viewModel = viewModel) { route ->
-                navController.navigate(route)
-            }
+            GetGoingScreen(viewModel = viewModel,
+                start = { navController.navigate(Screen.TrackingScreen.route.split("/")[0] + "/$it") },
+                navigateTo = { navController.navigate(it) }
+            )
         }
 
-        composable(route = Screen.TrackingScreen.route) {
+        composable(
+            route = Screen.TrackingScreen.route,
+            arguments = listOf(navArgument(name = "id") { type = NavType.IntType })
+        ) {
             val viewModel: TrackingViewModel = viewModel()
-            TrackingScreen(viewModel = viewModel)
+            viewModel.setExercise(it.arguments?.getInt("id") ?: 0)
+            TrackingScreen(viewModel = viewModel) {
+                navController.navigateUp()
+            }
         }
 
         composable(

@@ -14,6 +14,7 @@ class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : Vi
 
     val exerciseState = mutableStateOf("")
     var userId: Long = 0
+    private var selectedExercise = ExerciseType.WALKING
 
     init {
         // TODO just for testing
@@ -32,6 +33,11 @@ class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     }
 
     fun selectExercise(exercise: ExerciseType) {
+        selectedExercise = exercise
         exerciseState.value = exercise.value
+    }
+
+    fun getSelectedExerciseId(): Int {
+        return selectedExercise.id
     }
 }

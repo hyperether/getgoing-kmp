@@ -148,4 +148,8 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
             userEntity?.toUser()
         }
     }
+
+    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
+        return routeDao.getRouteByIdFlow(id)
+    }
 }

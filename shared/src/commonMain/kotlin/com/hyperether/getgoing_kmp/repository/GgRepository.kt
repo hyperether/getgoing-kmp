@@ -24,4 +24,5 @@ interface GgRepository {
     suspend fun insertUser(user: User):Long
     suspend fun updateUser(user: User)
     suspend fun getUser(userId: Long): Flow<User?>
+    suspend fun getRouteByIdFlow(id: Long): Flow<Route>
 }

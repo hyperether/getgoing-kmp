@@ -17,7 +17,7 @@ object Conversion {
         val minutes = (seconds % 3600) / 60
         seconds = seconds % 60
 
-        return twoDigitString(hours) + " : " + twoDigitString(minutes) + " : " +
+        return twoDigitString(hours) + ":" + twoDigitString(minutes) + ":" +
                 twoDigitString(seconds)
     }
 

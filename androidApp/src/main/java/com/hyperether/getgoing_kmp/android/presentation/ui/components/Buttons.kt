@@ -65,10 +65,12 @@ fun PrimaryButton(text: String, click: () -> Unit) {
 
 @Composable
 fun PlayButton(isRunning: Boolean = false, click: () -> Unit) {
-    IconButton(onClick = { click() },
+    IconButton(
+        onClick = { click() },
         Modifier
             .size(100.dp)
-            .padding(1.dp)) {
+            .padding(1.dp)
+    ) {
         Icon(
             modifier = Modifier.size(100.dp),
             imageVector = if (isRunning) Icons.Filled.Clear else Icons.Filled.PlayArrow,

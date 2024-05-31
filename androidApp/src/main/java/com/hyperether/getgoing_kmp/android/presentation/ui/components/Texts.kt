@@ -22,6 +22,14 @@ fun BoldLargeText(text: String, color: Color = MaterialTheme.colorScheme.onBackg
 }
 
 @Composable
+fun LargeText(text: String, color: Color = MaterialTheme.colorScheme.tertiary) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 20.sp)
+    )
+}
+
+@Composable
 fun HeadlineText(
     textId: Int
 ) {
