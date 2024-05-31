@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.repository
 
+import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.Route
 import com.hyperether.getgoing_kmp.repository.room.RouteAddedCallback
@@ -20,4 +21,7 @@ interface GgRepository {
     suspend fun markLastNode()
     suspend fun updateRouteDuration(id: Long, duration: Long)
     suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>>
+    suspend fun insertUser(user: User):Long
+    suspend fun updateUser(user: User)
+    suspend fun getUser(userId: Long): Flow<User?>
 }

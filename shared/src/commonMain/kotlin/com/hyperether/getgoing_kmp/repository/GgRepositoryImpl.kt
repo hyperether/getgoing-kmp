@@ -1,27 +1,32 @@
 package com.hyperether.getgoing_kmp.repository
 
+import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.repository.room.AppDatabase
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.NodeDao
 import com.hyperether.getgoing_kmp.repository.room.Route
 import com.hyperether.getgoing_kmp.repository.room.RouteAddedCallback
 import com.hyperether.getgoing_kmp.repository.room.RouteDao
+import com.hyperether.getgoing_kmp.repository.room.UserDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 
-class GgRepositoryImpl(private val appDatabase: AppDatabase): GgRepository {
+class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
 
     private var nodeDao: NodeDao
     private val routeDao: RouteDao
+    private val userDao: UserDao
 
 
     init {
         //todo add instance of database
         nodeDao = appDatabase.nodeDao()
         routeDao = appDatabase.routeDao()
+        userDao = appDatabase.userDao()
     }
 
 
@@ -122,5 +127,25 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase): GgRepository {
 
     override suspend fun getAllNodesByIdFlow(id: Long): Flow<List<Node>> {
         return nodeDao.getAllNodesByIdFlow(id)
+    }
+
+    override suspend fun insertUser(user: User): Long {
+        val allUsers = userDao.getAllUsers()
+        if (allUsers.isEmpty()) {
+            return userDao.insertUser(user.toUserEntity())
+        }
+        return allUsers[0].id
+    }
+
+    override suspend fun updateUser(user: User) {
+        userDao.updateUser(user.toUserEntity())
+    }
+
+    override suspend fun getUser(userId: Long): Flow<User?> {
+        val userEntityFlow = userDao.getUserFlow(userId)
+
+        return userEntityFlow.map { userEntity ->
+            userEntity?.toUser()
+        }
     }
 }

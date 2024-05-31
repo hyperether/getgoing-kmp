@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
+import com.hyperether.getgoing_kmp.android.presentation.navigation.Screen
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldLargeText
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.ButtonTextIcon
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.EndlessListExercise
@@ -30,21 +31,29 @@ import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpThem
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
 
 @Composable
-fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
+fun GetGoingScreen(
+    viewModel: GetGoingViewModel,
+    navigateTo: (String) -> Unit = {}
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        ShapedColumn(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.SpaceBetween) {
+        ShapedColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Logo()
-                Profile()
+                Profile(click = {
+                    navigateTo("${Screen.ProfileScreen.route}/${viewModel.userId}")
+                })
             }
 
             Row(
@@ -82,7 +91,7 @@ fun GetGoingScreen(viewModel: GetGoingViewModel, start: () -> Unit = {}) {
             Text(text = viewModel.exerciseState.value)
 
             PrimaryButton("Get ready") {
-                start()
+                navigateTo(Screen.TrackingScreen.route)
             }
         }
 
