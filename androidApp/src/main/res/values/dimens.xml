@@ -1,0 +1,16 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- List element -->
+
+    <!-- Default values-->
+
+    <!-- Show Location -->
+
+    <!-- Activity settings -->
+
+    <!-- Show Route -->
+
+    <!-- New UI dimensions -->
+    <dimen name="curved_bottom_bar">140dp</dimen>
+</resources>

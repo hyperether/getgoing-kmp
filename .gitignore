@@ -8,3 +8,6 @@ captures
 .cxx
 local.properties
 xcuserdata
+/androidApp/google-services.json
+/androidApp/src/main/res/values/google_maps_api.xml
+/androidApp/src/main/res/values/facebook_api.xml
