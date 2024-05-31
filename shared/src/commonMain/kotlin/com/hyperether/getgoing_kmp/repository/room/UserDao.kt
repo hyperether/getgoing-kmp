@@ -19,5 +19,8 @@ interface UserDao {
     fun getUserFlow(id: Long): Flow<UserEntity?>
 
     @Query("SELECT * FROM UserEntity")
+    fun getAllUsersFLow(): Flow<List<UserEntity>>
+
+    @Query("SELECT * FROM UserEntity")
     suspend fun getAllUsers(): List<UserEntity>
 }

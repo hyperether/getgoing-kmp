@@ -69,6 +69,10 @@ class MockRepo : GgRepository {
         return MutableStateFlow(listOf())
     }
 
+    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
+        return MutableStateFlow(Route(0, 0, 0.0, 0.0, "", 0.0, 0.0, 0, 2000))
+    }
+
     override suspend fun insertUser(user: User): Long {
         return 0L
     }
@@ -91,7 +95,7 @@ class MockRepo : GgRepository {
         )
     }
 
-    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
-        return MutableStateFlow(Route(0, 0, 0.0, 0.0, "", 0.0, 0.0, 0, 2000))
+    override fun getAllUsersFlow(): Flow<List<User>> {
+        return MutableStateFlow(listOf())
     }
 }
