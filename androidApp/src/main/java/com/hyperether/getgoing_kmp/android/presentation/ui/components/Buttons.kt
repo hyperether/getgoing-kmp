@@ -19,10 +19,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hyperether.getgoing_kmp.android.R
 
 @Composable
 fun ButtonTextIcon(text: String, icon: ImageVector? = null, click: () -> Unit = {}) {
@@ -79,12 +81,39 @@ fun PlayButton(isRunning: Boolean = false, click: () -> Unit) {
 }
 
 @Composable
-fun BackButton(click: () -> Unit) {
-    IconButton(onClick = { click() }) {
+fun BackButton(onNavigateBack: () -> Unit) {
+    IconButton(
+        modifier = Modifier
+            .size(60.dp)
+            .padding(bottom = 1.dp),
+        onClick = { onNavigateBack() }) {
         Icon(
+            modifier = Modifier.size(30.dp),
             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = "Back image",
-            tint = MaterialTheme.colorScheme.tertiary
+            contentDescription = stringResource(id = R.string.back),
+            tint = MaterialTheme.colorScheme.onBackground
         )
+    }
+}
+
+@Composable
+fun ConfirmButton(onClick: () -> Unit) {
+    TextButton(
+        onClick = {
+            onClick()
+        }
+    ) {
+        Text("Confirm")
+    }
+}
+
+@Composable
+fun DismissButton(onClick: () -> Unit) {
+    TextButton(
+        onClick = {
+            onClick()
+        }
+    ) {
+        Text("Cancel")
     }
 }
