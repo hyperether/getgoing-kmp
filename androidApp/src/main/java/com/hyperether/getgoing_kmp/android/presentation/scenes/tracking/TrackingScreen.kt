@@ -1,6 +1,5 @@
 package com.hyperether.getgoing_kmp.android.presentation.scenes.tracking
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,11 +23,10 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
-import com.hyperether.getgoing_kmp.android.presentation.ui.components.BackButton
+import com.hyperether.getgoing_kmp.android.presentation.ui.components.AppToolbarDynamic
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldLargeText
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.CirceButtonContainer
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.GGShape
-import com.hyperether.getgoing_kmp.android.presentation.ui.components.LargeText
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.PlayButton
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
 
@@ -38,18 +35,7 @@ fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState()
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(50.dp)
-                .background(color = MaterialTheme.colorScheme.background),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BackButton {
-                onBack()
-            }
-            LargeText(text = viewModel.selectedExercise.value)
-        }
+        AppToolbarDynamic(title = viewModel.selectedExercise.value) { onBack() }
         Box(
             Modifier
                 .weight(1f)

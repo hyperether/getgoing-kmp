@@ -62,6 +62,26 @@ fun AppToolbar(
 }
 
 @Composable
+fun AppToolbarDynamic(
+    title: String,
+    onNavigateBack: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        BackButton {
+            onNavigateBack()
+        }
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineMedium,
+        )
+    }
+}
+
+@Composable
 fun LastExercise() {
     Box(
         modifier = Modifier
