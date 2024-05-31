@@ -3,6 +3,7 @@ package com.hyperether.getgoing_kmp.android.presentation.ui.components
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,6 +34,15 @@ fun Profile(size: Dp = 60.dp, click: () -> Unit = {}) {
             contentDescription = "Profile icon",
             tint = MaterialTheme.colorScheme.primary,
             modifier = Modifier.size(size),
+        )
+    }
+}
+
+@Composable
+fun back(size: Dp = 20.dp){
+    IconButton(modifier = Modifier.size(size), onClick = { /*TODO*/ }) {
+        Icon(
+            Icons.Default.ArrowBack, contentDescription = "Cycling"
         )
     }
 }
