@@ -1,6 +1,7 @@
 package com.hyperether.getgoing_kmp.android.presentation.ui.components
 
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -17,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -27,11 +29,10 @@ import androidx.compose.ui.unit.sp
 import com.hyperether.getgoing_kmp.android.R
 
 @Composable
-fun ButtonTextIcon(text: String, icon: ImageVector? = null, click: () -> Unit = {}) {
-    TextButton(
-        onClick = { click() }, modifier = Modifier
-            .defaultMinSize(1.dp)
-            .padding(1.dp)
+fun LinkWithIcon(text: String, icon: ImageVector? = null, click: () -> Unit = {}) {
+    Row(
+        Modifier.clickable { click() },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = text,
@@ -44,7 +45,8 @@ fun ButtonTextIcon(text: String, icon: ImageVector? = null, click: () -> Unit = 
         Icon(
             imageVector = icon ?: Icons.Filled.KeyboardArrowRight,
             contentDescription = "Button icon",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 8.dp)
         )
     }
 }

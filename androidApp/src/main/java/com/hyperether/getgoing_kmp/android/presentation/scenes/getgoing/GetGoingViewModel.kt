@@ -8,11 +8,13 @@ import com.hyperether.getgoing_kmp.android.util.ExerciseType
 import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.model.UserGender
 import com.hyperether.getgoing_kmp.repository.GgRepository
+import com.hyperether.getgoing_kmp.repository.room.Route
 import kotlinx.coroutines.launch
 
 class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : ViewModel() {
 
     val exerciseState = mutableStateOf("")
+    var lastRoute = mutableStateOf<Route?>(null)
     var userId: Long = 0
     private var selectedExercise = ExerciseType.WALKING
 
@@ -39,5 +41,9 @@ class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : Vi
 
     fun getSelectedExerciseId(): Int {
         return selectedExercise.id
+    }
+
+    suspend fun getLastRoute() {
+        lastRoute.value = repository.getLastRoute()
     }
 }

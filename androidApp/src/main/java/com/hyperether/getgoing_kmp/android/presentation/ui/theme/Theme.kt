@@ -21,7 +21,8 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = BlackLight,
     onPrimary = Color.White,
     surfaceContainerLowest = SurfaceContainerLowest,
-    surfaceContainerLow = SurfaceContainerLow
+    surfaceContainerLow = SurfaceContainerLow,
+    surfaceVariant = transparentProgress
 
 )
 
@@ -34,7 +35,8 @@ private val LightColorScheme = lightColorScheme(
     onBackground = BlackLight,
     onPrimary = Color.White,
     surfaceContainerLowest = SurfaceContainerLowest,
-    surfaceContainerLow = SurfaceContainerLow
+    surfaceContainerLow = SurfaceContainerLow,
+    surfaceVariant = transparentProgress
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,10 +38,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
+import com.hyperether.getgoing_kmp.android.util.Conversion
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
+import com.hyperether.getgoing_kmp.repository.room.Route
 
 
 @Composable
@@ -82,13 +91,138 @@ fun AppToolbarDynamic(
 }
 
 @Composable
-fun LastExercise() {
+fun LastExercise(route: Route? = null) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(2f)
-            .background(color = MaterialTheme.colorScheme.primary)
-    )
+            .clip(RoundedCornerShape(12.dp))
+            .background(color = MaterialTheme.colorScheme.primary),
+        contentAlignment = Alignment.Center
+    ) {
+        route?.let { r ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                val exercise = ExerciseType.entries.find { it.id == r.activity_id }
+                ProgressWithIconAndText(
+                    exercise,
+                    "${r.length.toInt()}m",
+                    (r.length / r.goal).toFloat()
+                )
+
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "kcal",
+                        fontSize = 14.sp,
+                        style = TextStyle.Default.copy(
+                            fontSynthesis = FontSynthesis.None,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    )
+                    Text(
+                        text = "0",
+                        fontSize = 16.sp,
+                        style = TextStyle.Default.copy(
+                            fontSynthesis = FontSynthesis.None,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    )
+                }
+
+                ProgressWithIconAndText(
+                    null,
+                    Conversion.getDurationString(route.duration),
+                    0.5f
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ProgressWithIconAndText(
+    type: ExerciseType? = null,
+    textValue: String,
+    progress: Float
+) {
+    Box(modifier = Modifier.size(100.dp), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(
+            progress = { 1f },
+            modifier = Modifier.size(100.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant
+        )
+        CircularProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.size(100.dp),
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Column(
+            modifier = Modifier.size(100.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            when (type) {
+                ExerciseType.RUNNING -> {
+                    Icon(
+                        modifier = Modifier.size(25.dp),
+                        painter = painterResource(id = R.drawable.ic_light_running_white),
+                        contentDescription = "Activity icon",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                ExerciseType.WALKING -> {
+                    Icon(
+                        modifier = Modifier.size(25.dp),
+                        painter = painterResource(id = R.drawable.ic_walking_white),
+                        contentDescription = "Activity icon",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                ExerciseType.CYCLING -> {
+                    Icon(
+                        modifier = Modifier.size(25.dp),
+                        painter = painterResource(id = R.drawable.ic_bicycling_white),
+                        contentDescription = "Activity icon",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                null -> {
+                    Icon(
+                        modifier = Modifier.size(25.dp),
+                        imageVector = Icons.Default.AccessTime,
+                        contentDescription = "Activity icon",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+
+            Text(
+                text = textValue,
+                fontSize = 16.sp,
+                style = TextStyle.Default.copy(
+                    fontSynthesis = FontSynthesis.None,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+            Text(
+                text = type?.value ?: "Time",
+                fontSize = 14.sp,
+                style = TextStyle.Default.copy(
+                    fontSynthesis = FontSynthesis.None,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            )
+        }
+    }
 }
 
 @Composable
@@ -179,8 +313,7 @@ fun ShapedColumn(
             .drawBehind {
                 val path = generateGGPath(size)
                 drawPath(path = path, color = color, style = Fill)
-            }
-            .padding(bottom = 20.dp),
+            },
         verticalArrangement = verticalArrangement
     ) {
         content()
@@ -201,6 +334,8 @@ private fun ContainerComponentsPreview() {
             ShapedColumn(Modifier, Arrangement.SpaceBetween) {
                 Box(modifier = Modifier.size(300.dp))
             }
+
+            LastExercise()
         }
     }
 }
