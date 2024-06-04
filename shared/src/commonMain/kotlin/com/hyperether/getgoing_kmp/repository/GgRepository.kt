@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.repository
 
+import com.hyperether.getgoing_kmp.model.CurrentTracking
 import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.repository.room.Node
 import com.hyperether.getgoing_kmp.repository.room.Route
@@ -25,4 +26,8 @@ interface GgRepository {
     suspend fun updateUser(user: User)
     suspend fun getUser(userId: Long): Flow<User?>
     suspend fun getRouteByIdFlow(id: Long): Flow<Route>
+    fun initCurrentTracking(id: Long)
+    fun updateCurrentTrackingTime(time: Long)
+    fun updateCurrentTrackingExercise(exercise: Int)
+    fun getCurrentTracking(): CurrentTracking
 }

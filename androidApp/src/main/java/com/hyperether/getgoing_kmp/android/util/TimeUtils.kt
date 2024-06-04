@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.android.util
 
+import android.util.Log
 import android.widget.Chronometer
 import com.hyperether.getgoing_kmp.util.Constants
 
@@ -28,7 +29,7 @@ object TimeUtils {
         return returnValues
     }
 
-    fun getTimeEstimateForType(dist: Int, exerciseType: ExerciseType): Int {
+    fun getTimeEstimateForType(dist: Int, exerciseType: ExerciseType?): Int {
         return when (exerciseType) {
             ExerciseType.RUNNING -> {
                 (dist / (Constants.AVG_SPEED_RUN * 60)).toInt()
@@ -40,6 +41,10 @@ object TimeUtils {
 
             ExerciseType.CYCLING -> {
                 (dist / (Constants.AVG_SPEED_CYCLING * 60)).toInt()
+            }
+            else -> {
+                Log.e("TimeUtils", "This shouldn't happen")
+                1
             }
         }
     }

@@ -35,15 +35,18 @@ import java.util.Locale
 
 
 @SuppressLint("MissingPermission")
-class TrackingViewModel(val repository: GgRepository = App.getRepository()) : ViewModel() {
+class TrackingViewModel(
+    val repository: GgRepository = App.getRepository()
+) : ViewModel() {
 
     val trackingStarted = mutableStateOf(false)
 
     //todo move to utils
     val formatter = SimpleDateFormat("dd.MM.yyyy.' 'HH:mm:ss", Locale.ENGLISH)
 
-    private var timerScope = CoroutineScope(Dispatchers.IO + Job())
+    private var timerJob: Job? = null
     private var timeInt = 0L
+    var routeId = -1L
 
     var locationState = mutableStateOf(LatLng(0.0, 0.0))
     val listOfGreenPoly = mutableStateOf(listOf<LatLng>())
@@ -67,6 +70,15 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
         distanceState.value = String.format("%.02f m", 0.0)
         velocityState.value = String.format("%.02f m/s", 0.0)
         durationState.value = Conversion.getDurationString(0L)
+    }
+
+    fun continueTracking() {
+        routeId = repository.getCurrentTracking().routeId
+        timeInt = repository.getCurrentTracking().time
+        selectedExercise.value =
+            ExerciseType.entries.find { it.id == repository.getCurrentTracking().selectedExercise }?.value
+                ?: ""
+        startTracking(isContinue = true)
     }
 
     fun startLocationUpdates() {
@@ -95,8 +107,7 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
         )
     }
 
-    var routeId = -1L
-    fun startTracking() {
+    fun startTracking(isContinue: Boolean = false) {
         trackingStarted.value = true
         if (routeId.toInt() == -1) {
             viewModelScope.launch {
@@ -107,40 +118,51 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
                 repository.insertRoute(route, object : RouteAddedCallback {
                     override fun onRouteAdded(id: Long) {
                         routeId = id
+                        repository.initCurrentTracking(id)
+                        repository.updateCurrentTrackingExercise(activityId)
                         startServiceAndTimer()
-                        CoroutineScope(Dispatchers.IO).launch {
+                        viewModelScope.launch {
                             startObservingNodes()
                         }
-                        CoroutineScope(Dispatchers.IO).launch {
+                        viewModelScope.launch {
                             startObservingRoute()
                         }
                     }
                 })
             }
         } else {
-            startServiceAndTimer()
+            startServiceAndTimer(isContinue)
         }
     }
 
-    private fun startServiceAndTimer() {
-        val intent = Intent(
-            App.appCtxt(),
-            GGLocationService::class.java
-        )
-        intent.putExtra(
-            HyperLocationService.LOC_INTERVAL,
-            Constants.UPDATE_INTERVAL
-        )
-        intent.putExtra(
-            HyperLocationService.LOC_FASTEST_INTERVAL,
-            Constants.FASTEST_INTERVAL
-        )
-        intent.putExtra(
-            HyperLocationService.LOC_DISTANCE,
-            Constants.LOCATION_DISTANCE
-        )
-        App.appCtxt().startService(intent)
+    private fun startServiceAndTimer(isContinue: Boolean = false) {
         startTimer()
+        if (isContinue) {
+            viewModelScope.launch {
+                startObservingNodes()
+            }
+            viewModelScope.launch {
+                startObservingRoute()
+            }
+        } else {
+            val intent = Intent(
+                App.appCtxt(),
+                GGLocationService::class.java
+            )
+            intent.putExtra(
+                HyperLocationService.LOC_INTERVAL,
+                Constants.UPDATE_INTERVAL
+            )
+            intent.putExtra(
+                HyperLocationService.LOC_FASTEST_INTERVAL,
+                Constants.FASTEST_INTERVAL
+            )
+            intent.putExtra(
+                HyperLocationService.LOC_DISTANCE,
+                Constants.LOCATION_DISTANCE
+            )
+            App.appCtxt().startService(intent)
+        }
     }
 
     fun stopTracking() {
@@ -157,28 +179,31 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
 
     private suspend fun startObservingRoute() {
         repository.getRouteByIdFlow(routeId).collect {
+
             caloriesState.value = String.format("%.02f kcal", it.energy)
             distanceState.value = String.format("%.02f m", it.length)
             velocityState.value = String.format("%.02f m/s", it.currentSpeed)
+
+
         }
     }
 
     private fun startTimer() {
-        Log.d("Start timer", "start")
-        timerScope = CoroutineScope(Dispatchers.IO + Job())
-        timerScope.launch {
-            while (true) {
+        timerJob = viewModelScope.launch {
+            while (trackingStarted.value) {
                 delay(1000L)
                 timeInt++
+                Log.d("Update timer", "start timer coroutine")
                 durationState.value = Conversion.getDurationString(timeInt)
                 repository.updateRouteDuration(routeId, timeInt)
+                repository.updateCurrentTrackingTime(timeInt)
             }
         }
     }
 
     private fun cancelTimer() {
         Log.d("Start timer", "stop")
-        timerScope.cancel()
+        timerJob?.cancel()
     }
 
     private fun drawRoute(mRoute: List<Node>?) {
@@ -207,7 +232,6 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
             }
 
             if (firstNode?.isLast == true) {
-                Log.i("LAST", "${firstNode.isLast}")
                 continue
             }
             drawSegment(firstNode!!, secondNode!!, data)
@@ -237,6 +261,7 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
 
     fun setExercise(id: Int) {
         selectedExercise.value = ExerciseType.entries.find { it.id == id }?.value ?: ""
+        repository.updateCurrentTrackingExercise(id)
     }
 }
 

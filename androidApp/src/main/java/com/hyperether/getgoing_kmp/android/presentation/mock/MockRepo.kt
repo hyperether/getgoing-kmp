@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.android.presentation.mock
 
+import com.hyperether.getgoing_kmp.model.CurrentTracking
 import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.model.UserGender
 import com.hyperether.getgoing_kmp.repository.GgRepository
@@ -93,5 +94,21 @@ class MockRepo : GgRepository {
 
     override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
         return MutableStateFlow(Route(0, 0, 0.0, 0.0, "", 0.0, 0.0, 0, 2000))
+    }
+
+    override fun initCurrentTracking(id: Long) {
+
+    }
+
+    override fun updateCurrentTrackingTime(time: Long) {
+
+    }
+
+    override fun updateCurrentTrackingExercise(exercise: Int) {
+
+    }
+
+    override fun getCurrentTracking(): CurrentTracking {
+        return CurrentTracking()
     }
 }

@@ -141,7 +141,7 @@ fun LastExercise(route: Route? = null) {
                     Conversion.getDurationString(route.duration),
                     (route.duration / TimeUtils.getTimeEstimateForType(
                         r.goal.toInt(),
-                        exercise!!
+                        exercise
                     )).toFloat()
                 )
             }

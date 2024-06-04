@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.repository
 
+import com.hyperether.getgoing_kmp.model.CurrentTracking
 import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.repository.room.AppDatabase
 import com.hyperether.getgoing_kmp.repository.room.Node
@@ -29,6 +30,23 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
         userDao = appDatabase.userDao()
     }
 
+    private val currentTracking = CurrentTracking()
+
+    override fun initCurrentTracking(id: Long) {
+        currentTracking.routeId = id
+    }
+
+    override fun updateCurrentTrackingTime(time: Long) {
+        currentTracking.time = time
+    }
+
+    override fun updateCurrentTrackingExercise(exercise: Int) {
+        currentTracking.selectedExercise = exercise
+    }
+
+    override fun getCurrentTracking(): CurrentTracking {
+        return currentTracking
+    }
 
     override suspend fun daoInsertNode(node: Node) {
         withContext(Dispatchers.IO) {
@@ -118,6 +136,8 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
     override suspend fun updateRouteDuration(id: Long, duration: Long) {
         withContext(Dispatchers.IO) {
             val route = routeDao.getRouteById(id)
+            println("Update timer repo route ${route}")
+
             route?.let {
                 it.duration = duration
                 routeDao.updateRoute(it)

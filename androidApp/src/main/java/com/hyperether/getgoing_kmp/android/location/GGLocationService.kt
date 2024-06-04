@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.Location
 import android.os.Build
+import android.util.Log
 import com.hyperether.getgoing_kmp.android.App
 import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.SharedPref
@@ -16,6 +17,7 @@ import com.hyperether.toolbox.HyperNotification
 import com.hyperether.toolbox.location.HyperLocationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class GGLocationService : HyperLocationService() {
@@ -27,11 +29,12 @@ class GGLocationService : HyperLocationService() {
         private const val ACCURACY_MIN = 20.0
     }
 
+    var job: Job? = null
+
     private var nodeIndex: Int = 0
     private var profileID: Int = 0
     private var routeID: Long = 0
     private var weight: Double = 0.0
-    private var currentRoute: Route? = null
     private var previousLocation: Location? = null
     private var previousTimestamp: Long = 0
     private var timeCumulative: Long = 0
@@ -45,25 +48,14 @@ class GGLocationService : HyperLocationService() {
         super.onCreate()
         weight = SharedPref.weight.toDouble()
         previousTimestamp = System.currentTimeMillis()
-
-        CoroutineScope(Dispatchers.IO).launch {
-            currentRoute = repository.getLastRoute()
-            currentRoute?.let {
-                routeID = it.id
-                profileID = it.activity_id
-                distanceCumulative = it.length
-                kcalCumulative = it.energy
-                velocityAvg = it.avgSpeed
-                timeCumulative = it.duration
-                secondsCumulative = (timeCumulative / 1000).toInt()
-            }
-        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         CoroutineScope(Dispatchers.IO).launch {
             repository.markLastNode()
+            Log.d("Service thread", "Service on destroy")
+            job?.cancel()
         }
     }
 
@@ -92,7 +84,8 @@ class GGLocationService : HyperLocationService() {
 
     override fun onLocationUpdate(location: Location?) {
         location?.let {
-            CoroutineScope(Dispatchers.IO).launch {
+            job = CoroutineScope(Dispatchers.IO).launch {
+                Log.d("Service thread", "Service still running")
                 if (it.accuracy < ACCURACY_MIN) {
                     if (previousLocation == null) {
                         previousTimestamp = System.currentTimeMillis()
@@ -116,7 +109,7 @@ class GGLocationService : HyperLocationService() {
                                 )
                             kcalCumulative += kcalCurrent
 
-                            currentRoute?.let { route ->
+                            repository.getLastRoute()?.let { route ->
                                 route.length = distanceCumulative
                                 route.energy = kcalCumulative
                                 route.currentSpeed = velocity.toDouble()
