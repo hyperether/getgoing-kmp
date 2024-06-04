@@ -27,4 +27,20 @@ object TimeUtils {
 
         return returnValues
     }
+
+    fun getTimeEstimateForType(dist: Int, exerciseType: ExerciseType): Int {
+        return when (exerciseType) {
+            ExerciseType.RUNNING -> {
+                (dist / (Constants.AVG_SPEED_RUN * 60)).toInt()
+            }
+
+            ExerciseType.WALKING -> {
+                (dist / (Constants.AVG_SPEED_WALK * 60)).toInt()
+            }
+
+            ExerciseType.CYCLING -> {
+                (dist / (Constants.AVG_SPEED_CYCLING * 60)).toInt()
+            }
+        }
+    }
 }

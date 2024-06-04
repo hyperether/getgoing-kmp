@@ -47,6 +47,7 @@ import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
 import com.hyperether.getgoing_kmp.android.util.Conversion
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
+import com.hyperether.getgoing_kmp.android.util.TimeUtils
 import com.hyperether.getgoing_kmp.repository.room.Route
 
 
@@ -138,7 +139,10 @@ fun LastExercise(route: Route? = null) {
                 ProgressWithIconAndText(
                     null,
                     Conversion.getDurationString(route.duration),
-                    0.5f
+                    (route.duration / TimeUtils.getTimeEstimateForType(
+                        r.goal.toInt(),
+                        exercise!!
+                    )).toFloat()
                 )
             }
         }

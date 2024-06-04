@@ -171,6 +171,7 @@ class TrackingViewModel(val repository: GgRepository = App.getRepository()) : Vi
                 delay(1000L)
                 timeInt++
                 durationState.value = Conversion.getDurationString(timeInt)
+                repository.updateRouteDuration(routeId, timeInt)
             }
         }
     }
