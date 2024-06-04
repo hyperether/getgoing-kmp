@@ -37,12 +37,3 @@ fun Profile(size: Dp = 60.dp, click: () -> Unit = {}) {
         )
     }
 }
-
-@Composable
-fun back(size: Dp = 20.dp){
-    IconButton(modifier = Modifier.size(size), onClick = { /*TODO*/ }) {
-        Icon(
-            Icons.Default.ArrowBack, contentDescription = "Cycling"
-        )
-    }
-}

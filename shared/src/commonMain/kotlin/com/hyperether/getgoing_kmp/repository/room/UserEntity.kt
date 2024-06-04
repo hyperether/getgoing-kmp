@@ -14,7 +14,8 @@ data class UserEntity(
     var height: Int = 0,
     var weight: Int = 0,
     var totalKm: Double = 0.00,
-    var totalKcal: Int = 0
+    var totalKcal: Int = 0,
+    var goalMeters:Int =0
 ) {
     fun toUser(): User {
         return User(
@@ -24,7 +25,8 @@ data class UserEntity(
             height = height,
             weight = weight,
             totalKm = totalKm,
-            totalKcal = totalKcal
+            totalKcal = totalKcal ,
+            goalMeters= goalMeters
         )
     }
 

@@ -63,7 +63,8 @@ fun GetGoingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BoldLargeText(text = stringResource(R.string.last_exercise))
-                ButtonTextIcon("View all", Icons.Default.KeyboardArrowRight)
+                ButtonTextIcon("View all", Icons.Default.KeyboardArrowRight,click= {
+                    navigateTo("${Screen.ActivitiesScreen.route}/${viewModel.userId}")})
             }
 
             LastExercise()
