@@ -18,7 +18,6 @@ import kotlin.math.roundToInt
 
 class ActivitiesViewModel(private val repository: GgRepository = App.getRepository()) : ViewModel() {
 
-    var mockRoute=mockR()
     var routeList =mutableStateOf(emptyList<Route>())
     var meters = mutableStateOf(4329)
         private set
@@ -46,16 +45,6 @@ class ActivitiesViewModel(private val repository: GgRepository = App.getReposito
                 }
             }
         }
-    }
-
-    fun mockR(): List<Route> {
-        val list= mutableListOf<Route>()
-        list.add(Route(1, 1, 1.0, 3.9, "", 1.0, 1.0, 1, 1))
-        list.add(Route(1, 1, 1.0, 4.0, "", 1.0, 1.0, 2, 1))
-        list.add(Route(1, 1, 1.0, 2.0, "", 1.0, 1.0, 3, 1))
-        list.add(Route(1, 1, 1.0, 0.0, "", 1.0, 1.0, 1, 1))
-
-        return list
     }
 
     fun fetchRouteList(){
