@@ -88,7 +88,7 @@ class GGLocationService : HyperLocationService() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentText(getString(R.string.duration_distance_notification_text, time, distance))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSilent(true)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GetGoing</string>
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">GetGoing</string>
     <string name="last_exercise">Last exercise</string>
     <string name="notification_title">GG</string>
     <string name="back">back</string>
