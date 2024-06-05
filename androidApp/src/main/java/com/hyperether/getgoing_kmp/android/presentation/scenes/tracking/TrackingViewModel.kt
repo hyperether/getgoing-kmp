@@ -23,11 +23,7 @@ import com.hyperether.getgoing_kmp.repository.room.Route
 import com.hyperether.getgoing_kmp.repository.room.RouteAddedCallback
 import com.hyperether.getgoing_kmp.util.Constants
 import com.hyperether.toolbox.location.HyperLocationService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -45,7 +41,6 @@ class TrackingViewModel(
     val formatter = SimpleDateFormat("dd.MM.yyyy.' 'HH:mm:ss", Locale.ENGLISH)
 
     private var timerJob: Job? = null
-    private var timeInt = 0L
     var routeId = -1L
 
     var locationState = mutableStateOf(LatLng(0.0, 0.0))
@@ -74,7 +69,6 @@ class TrackingViewModel(
 
     fun continueTracking() {
         routeId = repository.getCurrentTracking().routeId
-        timeInt = repository.getCurrentTracking().time
         selectedExercise.value =
             ExerciseType.entries.find { it.id == repository.getCurrentTracking().selectedExercise }?.value
                 ?: ""
@@ -136,7 +130,7 @@ class TrackingViewModel(
     }
 
     private fun startServiceAndTimer(isContinue: Boolean = false) {
-        startTimer()
+        startObservingTimer()
         if (isContinue) {
             viewModelScope.launch {
                 startObservingNodes()
@@ -167,7 +161,7 @@ class TrackingViewModel(
 
     fun stopTracking() {
         trackingStarted.value = false
-        cancelTimer()
+        stopObservingTimer()
         App.appCtxt().stopService(Intent(App.appCtxt(), GGLocationService::class.java))
     }
 
@@ -188,20 +182,19 @@ class TrackingViewModel(
         }
     }
 
-    private fun startTimer() {
+    private fun startObservingTimer() {
         timerJob = viewModelScope.launch {
-            while (trackingStarted.value) {
-                delay(1000L)
-                timeInt++
+            repository.getCurrentTracking().time.collect {
                 Log.d("Update timer", "start timer coroutine")
-                durationState.value = Conversion.getDurationString(timeInt)
-                repository.updateRouteDuration(routeId, timeInt)
-                repository.updateCurrentTrackingTime(timeInt)
+                durationState.value = Conversion.getDurationString(it)
+                repository.updateRouteDuration(routeId, it)
             }
         }
+
+
     }
 
-    private fun cancelTimer() {
+    private fun stopObservingTimer() {
         Log.d("Start timer", "stop")
         timerJob?.cancel()
     }

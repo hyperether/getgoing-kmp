@@ -12,12 +12,13 @@ import com.hyperether.getgoing_kmp.android.SharedPref
 import com.hyperether.getgoing_kmp.android.presentation.MainActivity
 import com.hyperether.getgoing_kmp.android.util.CaloriesCalculation
 import com.hyperether.getgoing_kmp.repository.room.Node
-import com.hyperether.getgoing_kmp.repository.room.Route
 import com.hyperether.toolbox.HyperNotification
 import com.hyperether.toolbox.location.HyperLocationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GGLocationService : HyperLocationService() {
@@ -33,7 +34,7 @@ class GGLocationService : HyperLocationService() {
 
     private var nodeIndex: Int = 0
     private var profileID: Int = 0
-    private var routeID: Long = 0
+    private var routeID: Long = repository.getCurrentTracking().routeId
     private var weight: Double = 0.0
     private var previousLocation: Location? = null
     private var previousTimestamp: Long = 0
@@ -44,14 +45,27 @@ class GGLocationService : HyperLocationService() {
     private var velocityAvg: Double = 0.0
     private val calcCal = CaloriesCalculation()
 
+    private val timerJob = SupervisorJob()
+    private val timerScope = CoroutineScope(Dispatchers.IO + timerJob)
+
     override fun onCreate() {
         super.onCreate()
         weight = SharedPref.weight.toDouble()
         previousTimestamp = System.currentTimeMillis()
+
+        timerScope.launch {
+            while (true) {
+                Log.d("service", "Service update timer")
+                delay(1000L)
+                val time = repository.getCurrentTracking().time.value + 1
+                repository.updateCurrentTrackingTime(time)
+            }
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        timerJob.cancel()
         CoroutineScope(Dispatchers.IO).launch {
             repository.markLastNode()
             Log.d("Service thread", "Service on destroy")

@@ -55,7 +55,7 @@ fun GetGoingScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(20.dp),
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(
@@ -78,7 +78,14 @@ fun GetGoingScreen(
                     LinkWithIcon("View all", Icons.Default.KeyboardArrowRight)
                 }
 
-                LastExercise(viewModel.lastRoute.value)
+                LastExercise(
+                    viewModel.lastRouteSelectedExercise.value,
+                    viewModel.lastRouteDistance.value,
+                    viewModel.lastRouteProgress.floatValue,
+                    viewModel.lastRouteKcal.value,
+                    viewModel.lastRouteDuration.value,
+                    viewModel.lastRouteTimeProgress.floatValue
+                )
 
 
                 Column {
@@ -99,8 +106,8 @@ fun GetGoingScreen(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp)
-                .padding(20.dp),
+                .height(120.dp)
+                .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {

@@ -45,10 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
-import com.hyperether.getgoing_kmp.android.util.Conversion
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
-import com.hyperether.getgoing_kmp.android.util.TimeUtils
-import com.hyperether.getgoing_kmp.repository.room.Route
 
 
 @Composable
@@ -92,59 +89,60 @@ fun AppToolbarDynamic(
 }
 
 @Composable
-fun LastExercise(route: Route? = null) {
+fun LastExercise(
+    exercise: ExerciseType,
+    distance: String,
+    exerciseProgress: Float,
+    kcal: String,
+    duration: String,
+    timeProgress: Float
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(2f)
+            .aspectRatio(1.7f)
             .clip(RoundedCornerShape(12.dp))
             .background(color = MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
-        route?.let { r ->
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceEvenly
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            ProgressWithIconAndText(
+                exercise,
+                distance,
+                exerciseProgress
+            )
+
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                val exercise = ExerciseType.entries.find { it.id == r.activity_id }
-                ProgressWithIconAndText(
-                    exercise,
-                    "${r.length.toInt()}m",
-                    (r.length / r.goal).toFloat()
+                Text(
+                    text = "kcal",
+                    fontSize = 14.sp,
+                    style = TextStyle.Default.copy(
+                        fontSynthesis = FontSynthesis.None,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
                 )
-
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = "kcal",
-                        fontSize = 14.sp,
-                        style = TextStyle.Default.copy(
-                            fontSynthesis = FontSynthesis.None,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
+                Text(
+                    text = kcal,
+                    fontSize = 16.sp,
+                    style = TextStyle.Default.copy(
+                        fontSynthesis = FontSynthesis.None,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
-                    Text(
-                        text = "0",
-                        fontSize = 16.sp,
-                        style = TextStyle.Default.copy(
-                            fontSynthesis = FontSynthesis.None,
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    )
-                }
-
-                ProgressWithIconAndText(
-                    null,
-                    Conversion.getDurationString(route.duration),
-                    (route.duration / TimeUtils.getTimeEstimateForType(
-                        r.goal.toInt(),
-                        exercise
-                    )).toFloat()
                 )
             }
+
+            ProgressWithIconAndText(
+                null,
+                duration,
+                timeProgress
+            )
         }
     }
 }
@@ -339,7 +337,9 @@ private fun ContainerComponentsPreview() {
                 Box(modifier = Modifier.size(300.dp))
             }
 
-            LastExercise()
+            LastExercise(
+                ExerciseType.RUNNING, "20m", 0.3f, "34", "10:23:23", 0.2f
+            )
         }
     }
 }

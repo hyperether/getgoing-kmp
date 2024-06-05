@@ -99,7 +99,7 @@ fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp),
+                .height(120.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

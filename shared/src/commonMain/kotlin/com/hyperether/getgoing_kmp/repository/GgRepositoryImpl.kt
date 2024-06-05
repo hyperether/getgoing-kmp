@@ -32,12 +32,13 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
 
     private val currentTracking = CurrentTracking()
 
+
     override fun initCurrentTracking(id: Long) {
         currentTracking.routeId = id
     }
 
     override fun updateCurrentTrackingTime(time: Long) {
-        currentTracking.time = time
+        currentTracking.time.value = time
     }
 
     override fun updateCurrentTrackingExercise(exercise: Int) {
