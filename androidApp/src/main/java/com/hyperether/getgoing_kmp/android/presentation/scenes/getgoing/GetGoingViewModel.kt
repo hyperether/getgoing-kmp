@@ -9,14 +9,13 @@ import com.hyperether.getgoing_kmp.android.util.Conversion
 import com.hyperether.getgoing_kmp.android.util.ExerciseType
 import com.hyperether.getgoing_kmp.android.util.TimeUtils
 import com.hyperether.getgoing_kmp.model.User
-import com.hyperether.getgoing_kmp.model.UserGender
 import com.hyperether.getgoing_kmp.repository.GgRepository
 import kotlinx.coroutines.launch
 
 class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : ViewModel() {
 
     val exerciseState = mutableStateOf("")
-    var userId: Long = 0
+    var user: User? = null
     private var selectedExercise = ExerciseType.WALKING
 
     var lastRouteSelectedExercise = mutableStateOf(ExerciseType.WALKING)
@@ -27,18 +26,12 @@ class GetGoingViewModel(val repository: GgRepository = App.getRepository()) : Vi
     var lastRouteTimeProgress = mutableFloatStateOf(0f)
 
     init {
-        // TODO just for testing
         viewModelScope.launch {
-            userId = repository.insertUser(
-                User(
-                    gender = UserGender.Male,
-                    age = 32,
-                    height = 188,
-                    weight = 84,
-                    totalKm = 0.0,
-                    totalKcal = 0
-                )
-            )
+            repository.getAllUsersFlow().collect {
+                if (it.isNotEmpty()) {
+                    user = it[0] // for now we only have one user
+                }
+            }
         }
     }
 

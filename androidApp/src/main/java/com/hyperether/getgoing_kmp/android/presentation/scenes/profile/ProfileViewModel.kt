@@ -29,12 +29,15 @@ class ProfileViewModel(
     fun updateUserGender(gender: UserGender) {
         viewModelScope.launch {
             val currentUser = _user.value
-            currentUser?.let {
-                repository.updateUser(
-                    it.copy(
-                        gender = gender
-                    )
-                )
+            if (currentUser != null) {
+                if (currentUser.gender != gender) {
+                    val updatedUser = currentUser.copy(gender = gender)
+                    repository.updateUser(updatedUser)
+                }
+            } else {
+                val newUser = User(gender = gender)
+                val userId = repository.insertUser(newUser)
+                fetchUserById(userId)
             }
         }
     }
@@ -42,12 +45,15 @@ class ProfileViewModel(
     fun updateUserAge(age: Int) {
         viewModelScope.launch {
             val currentUser = _user.value
-            currentUser?.let {
-                repository.updateUser(
-                    it.copy(
-                        age = age
-                    )
-                )
+            if (currentUser != null) {
+                if (currentUser.age != age) {
+                    val updatedUser = currentUser.copy(age = age)
+                    repository.updateUser(updatedUser)
+                }
+            } else {
+                val newUser = User(age = age)
+                val userId = repository.insertUser(newUser)
+                fetchUserById(userId)
             }
         }
     }
@@ -55,12 +61,15 @@ class ProfileViewModel(
     fun updateUserHeight(height: Int) {
         viewModelScope.launch {
             val currentUser = _user.value
-            currentUser?.let {
-                repository.updateUser(
-                    it.copy(
-                        height = height
-                    )
-                )
+            if (currentUser != null) {
+                if (currentUser.height != height) {
+                    val updatedUser = currentUser.copy(height = height)
+                    repository.updateUser(updatedUser)
+                }
+            } else {
+                val newUser = User(height = height)
+                val userId = repository.insertUser(newUser)
+                fetchUserById(userId)
             }
         }
     }
@@ -68,12 +77,15 @@ class ProfileViewModel(
     fun updateUserWeight(weight: Int) {
         viewModelScope.launch {
             val currentUser = _user.value
-            currentUser?.let {
-                repository.updateUser(
-                    it.copy(
-                        weight = weight
-                    )
-                )
+            if (currentUser != null) {
+                if (currentUser.weight != weight) {
+                    val updatedUser = currentUser.copy(weight = weight)
+                    repository.updateUser(updatedUser)
+                }
+            } else {
+                val newUser = User(weight = weight)
+                val userId = repository.insertUser(newUser)
+                fetchUserById(userId)
             }
         }
     }

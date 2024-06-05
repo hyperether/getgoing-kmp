@@ -78,7 +78,10 @@ fun EditGenderDialog(
                 onDismiss()
             },
             title = {
-                Text(text = "Please select your gender:")
+                Text(
+                    text = "Please select your gender:",
+                    color = MaterialTheme.colorScheme.primary
+                )
             },
             text = {
                 Column {
@@ -142,7 +145,10 @@ fun EditAgeDialog(
                 onDismiss()
             },
             title = {
-                Text(text = "Enter your weight:")
+                Text(
+                    text = "How old are you?",
+                    color = MaterialTheme.colorScheme.primary
+                )
             },
             text = {
                 LargeDropdownMenu(
@@ -185,7 +191,10 @@ fun EditHeightDialog(
                 onDismiss()
             },
             title = {
-                Text(text = "Enter your weight:")
+                Text(
+                    text = "Enter your height:",
+                    color = MaterialTheme.colorScheme.primary
+                )
             },
             text = {
                 LargeDropdownMenu(
@@ -228,7 +237,10 @@ fun EditWeightDialog(
                 onDismiss()
             },
             title = {
-                Text(text = "Enter your weight:")
+                Text(
+                    text = "Enter your weight:",
+                    color = MaterialTheme.colorScheme.primary
+                )
             },
             text = {
                 LargeDropdownMenu(
