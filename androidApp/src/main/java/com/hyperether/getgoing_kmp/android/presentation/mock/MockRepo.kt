@@ -115,4 +115,8 @@ class MockRepo : GgRepository {
     override fun getCurrentTracking(): CurrentTracking {
         return CurrentTracking()
     }
+
+    override fun updateCurrentTrackingDistance(distance: Double) {
+
+    }
 }

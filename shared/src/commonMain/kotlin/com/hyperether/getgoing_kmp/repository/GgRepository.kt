@@ -31,4 +31,5 @@ interface GgRepository {
     fun updateCurrentTrackingTime(time: Long)
     fun updateCurrentTrackingExercise(exercise: Int)
     fun getCurrentTracking(): CurrentTracking
+    fun updateCurrentTrackingDistance(distance: Double)
 }

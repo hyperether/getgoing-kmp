@@ -1,18 +1,23 @@
 package com.hyperether.getgoing_kmp.android.location
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.location.Location
 import android.os.Build
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.hyperether.getgoing_kmp.android.App
 import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.SharedPref
 import com.hyperether.getgoing_kmp.android.presentation.MainActivity
 import com.hyperether.getgoing_kmp.android.util.CaloriesCalculation
+import com.hyperether.getgoing_kmp.android.util.Conversion
 import com.hyperether.getgoing_kmp.repository.room.Node
-import com.hyperether.toolbox.HyperNotification
 import com.hyperether.toolbox.location.HyperLocationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +33,7 @@ class GGLocationService : HyperLocationService() {
     companion object {
         private const val TAG = "GPSTrackingService"
         private const val ACCURACY_MIN = 20.0
+        private const val CHANNEL_ID = "Service Channel"
     }
 
     var job: Job? = null
@@ -50,6 +56,7 @@ class GGLocationService : HyperLocationService() {
 
     override fun onCreate() {
         super.onCreate()
+        createNotificationChannel()
         weight = SharedPref.weight.toDouble()
         previousTimestamp = System.currentTimeMillis()
 
@@ -59,6 +66,7 @@ class GGLocationService : HyperLocationService() {
                 delay(1000L)
                 val time = repository.getCurrentTracking().time.value + 1
                 repository.updateCurrentTrackingTime(time)
+                startForeground()
             }
         }
     }
@@ -73,22 +81,27 @@ class GGLocationService : HyperLocationService() {
         }
     }
 
-    override fun startForeground() {
+    private fun createNotification(time: String, distance: String): Notification {
         val intent = Intent(this, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setContentText(getString(R.string.duration_distance_notification_text, time, distance))
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setSilent(true)
+            .setOngoing(true)
+            .setContentIntent(pendingIntent)
+        return builder.build()
+    }
 
-        val notification = HyperNotification.getInstance().getForegroundServiceNotification(
-            this,
-            getString(R.string.notification_title),
-            getString(R.string.notification_text),
-            R.drawable.ic_launcher_background,
-            R.drawable.ic_launcher_background,
-            pendingIntent
+    override fun startForeground() {
+        val notification = createNotification(
+            Conversion.getDurationString(repository.getCurrentTracking().time.value),
+            String.format("%.02f m", repository.getCurrentTracking().distance)
         )
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(1123, notification, FOREGROUND_SERVICE_TYPE_LOCATION)
         } else {
@@ -128,7 +141,7 @@ class GGLocationService : HyperLocationService() {
                                 route.energy = kcalCumulative
                                 route.currentSpeed = velocity.toDouble()
                                 route.avgSpeed = velocityAvg
-
+                                repository.updateCurrentTrackingDistance(distanceCumulative)
                                 repository.daoInsertNode(createNode(it))
                                 repository.updateRoute(route)
 
@@ -147,4 +160,17 @@ class GGLocationService : HyperLocationService() {
             location.speed, nodeIndex++.toLong(), routeId = routeID
         )
     }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = CHANNEL_ID
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(CHANNEL_ID, name, importance)
+            // Register the channel with the system.
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
 }

@@ -45,6 +45,10 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
         currentTracking.selectedExercise = exercise
     }
 
+    override fun updateCurrentTrackingDistance(distance: Double) {
+        currentTracking.distance = distance
+    }
+
     override fun getCurrentTracking(): CurrentTracking {
         return currentTracking
     }
