@@ -10,6 +10,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.hyperether.getgoing_kmp.android.presentation.navigation.Arguments.USER_ID
+import com.hyperether.getgoing_kmp.android.presentation.scenes.details.DetailsScreen
+import com.hyperether.getgoing_kmp.android.presentation.scenes.details.DetailsViewModel
 import com.hyperether.getgoing_kmp.android.presentation.scenes.getgoing.GetGoingScreen
 import com.hyperether.getgoing_kmp.android.presentation.scenes.getgoing.GetGoingViewModel
 import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.ProfileScreen
@@ -73,6 +75,24 @@ fun NavGraph(navController: NavHostController) {
                     navController.navigateUp()
                 }
             )
+        }
+
+        composable(
+            route = Screen.TrackingScreen.route,
+            arguments = listOf(navArgument(name = "activityId") {
+                nullable = true
+                defaultValue = null
+                type = NavType.StringType
+            })
+        ) {
+            val viewModel: DetailsViewModel = viewModel()
+            it.arguments?.getString("activityId")?.let {
+                viewModel.setExercise(it.toInt())
+            }
+
+            DetailsScreen(viewModel = viewModel) {
+                navController.navigateUp()
+            }
         }
     }
 }

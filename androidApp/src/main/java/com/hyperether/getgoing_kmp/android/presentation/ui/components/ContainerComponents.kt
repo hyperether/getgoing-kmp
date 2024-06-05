@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.android.presentation.ui.components
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
@@ -18,8 +19,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -35,13 +34,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontSynthesis
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hyperether.getgoing_kmp.android.R
@@ -324,6 +328,46 @@ fun ShapedColumn(
     }
 }
 
+@Composable
+fun GoalProgress(
+    bgColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    color: Color = MaterialTheme.colorScheme.primary,
+    canvasSize: Dp = 240.dp,
+    progress: Float = 0f
+) {
+    Canvas(
+        modifier = Modifier
+            .size(canvasSize)
+    ) {
+        val strokeWidthPx = 12.dp.toPx()
+        val arcSize = size.width - strokeWidthPx
+
+        drawArc(
+            color = bgColor,
+            30f,
+            -240f,
+            useCenter = false,
+            size = Size(arcSize, arcSize),
+            style = Stroke(strokeWidthPx, cap = StrokeCap.Round),
+            topLeft = Offset(strokeWidthPx / 2, strokeWidthPx / 2)
+        )
+
+        var angle = progress * 250f
+        if (angle > 250f) {
+            angle = 250f
+        }
+        drawArc(
+            color = color,
+            -210f,
+            angle,
+            useCenter = false,
+            size = Size(arcSize, arcSize),
+            style = Stroke(strokeWidthPx, cap = StrokeCap.Round),
+            topLeft = Offset(strokeWidthPx / 2, strokeWidthPx / 2)
+        )
+    }
+}
+
 
 @Preview
 @Composable
@@ -336,12 +380,23 @@ private fun ContainerComponentsPreview() {
             )
 
             ShapedColumn(Modifier, Arrangement.SpaceBetween) {
-                Box(modifier = Modifier.size(300.dp))
+                Box(modifier = Modifier.size(300.dp)) {
+
+                }
             }
 
             LastExercise(
                 ExerciseType.RUNNING, "20m", 0.3f, "34", "10:23:23", 0.2f
             )
+
+            Box(
+                modifier = Modifier
+                    .size(200.dp)
+                    .background(MaterialTheme.colorScheme.surfaceContainer),
+                contentAlignment = Alignment.Center
+            ) {
+                GoalProgress(progress = 0.1f)
+            }
         }
     }
 }
