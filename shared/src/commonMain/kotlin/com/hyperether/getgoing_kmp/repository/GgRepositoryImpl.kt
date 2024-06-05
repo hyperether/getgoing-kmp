@@ -129,6 +129,10 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
         return nodeDao.getAllNodesByIdFlow(id)
     }
 
+    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
+        return routeDao.getRouteByIdFlow(id)
+    }
+
     override suspend fun insertUser(user: User): Long {
         val allUsers = userDao.getAllUsers()
         if (allUsers.isEmpty()) {
@@ -149,7 +153,11 @@ class GgRepositoryImpl(private val appDatabase: AppDatabase) : GgRepository {
         }
     }
 
-    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
-        return routeDao.getRouteByIdFlow(id)
+    override fun getAllUsersFlow(): Flow<List<User>> {
+        return userDao.getAllUsersFLow().map {
+            it.map { userEntity ->
+                userEntity.toUser()
+            }
+        }
     }
 }
