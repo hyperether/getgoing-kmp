@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -200,7 +201,7 @@ fun ProgressWithIconAndText(
                 null -> {
                     Icon(
                         modifier = Modifier.size(25.dp),
-                        imageVector = Icons.Default.AccessTime,
+                        painter = painterResource(id = R.drawable.ic_timer),
                         contentDescription = "Activity icon",
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
@@ -213,7 +214,8 @@ fun ProgressWithIconAndText(
                 style = TextStyle.Default.copy(
                     fontSynthesis = FontSynthesis.None,
                     color = MaterialTheme.colorScheme.onPrimary
-                )
+                ),
+                modifier = Modifier.padding(4.dp)
             )
             Text(
                 text = type?.value ?: "Time",

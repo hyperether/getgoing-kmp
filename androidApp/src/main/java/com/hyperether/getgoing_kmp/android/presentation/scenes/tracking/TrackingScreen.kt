@@ -26,7 +26,7 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.AppToolbarDynamic
-import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldLargeText
+import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldMediumText
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.CirceButtonContainer
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.GGShape
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.PlayButton
@@ -103,7 +103,7 @@ fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BoldLargeText(text = viewModel.distanceState.value)
+            BoldMediumText(text = viewModel.distanceState.value)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
