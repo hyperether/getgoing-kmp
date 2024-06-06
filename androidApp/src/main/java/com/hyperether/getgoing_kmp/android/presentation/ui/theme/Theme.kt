@@ -14,27 +14,29 @@ import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
     primary = PrimaryColorLight,
-    secondary = PrimaryColorLight,
+    secondary = Secondary,
     tertiary = Tertiary,
     background = BackgroundColorLight,
     primaryContainer = PrimaryBackgroundColorLight,
     onBackground = BlackLight,
     onPrimary = Color.White,
     surfaceContainerLowest = SurfaceContainerLowest,
-    surfaceContainerLow = SurfaceContainerLow
+    surfaceContainerLow = SurfaceContainerLow,
+    surfaceVariant = transparentProgress
 
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = PrimaryColorLight,
-    secondary = PrimaryColorLight,
+    secondary = Secondary,
     tertiary = Tertiary,
     background = BackgroundColorLight,
     primaryContainer = PrimaryBackgroundColorLight,
     onBackground = BlackLight,
     onPrimary = Color.White,
     surfaceContainerLowest = SurfaceContainerLowest,
-    surfaceContainerLow = SurfaceContainerLow
+    surfaceContainerLow = SurfaceContainerLow,
+    surfaceVariant = transparentProgress
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -65,7 +67,7 @@ fun GetgoingkmpTheme(
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = LightColorScheme,
         typography = Typography,
         content = content
     )

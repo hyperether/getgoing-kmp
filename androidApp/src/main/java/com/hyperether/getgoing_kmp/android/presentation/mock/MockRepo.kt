@@ -1,5 +1,6 @@
 package com.hyperether.getgoing_kmp.android.presentation.mock
 
+import com.hyperether.getgoing_kmp.model.CurrentTracking
 import com.hyperether.getgoing_kmp.model.User
 import com.hyperether.getgoing_kmp.model.UserGender
 import com.hyperether.getgoing_kmp.repository.GgRepository
@@ -36,7 +37,29 @@ class MockRepo : GgRepository {
     }
 
     override suspend fun getAllRoutes(): List<Route> {
-        return emptyList()
+        return listOf(
+            Route(0, 350, 400.0, 1000.0, "05.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(0, 350, 400.0, 2000.0, "06.04.2024. 09:26:45", 0.0, 0.0, 0, 3000),
+            Route(0, 350, 400.0, 3000.0, "07.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(0, 350, 400.0, 4000.0, "08.04.2024. 09:26:45", 0.0, 0.0, 0, 5000),
+            Route(0, 350, 400.0, 3000.0, "05.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(0, 350, 400.0, 9000.0, "06.04.2024. 09:26:45", 0.0, 0.0, 0, 3000),
+            Route(0, 350, 400.0, 3000.0, "07.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(0, 350, 400.0, 5000.0, "08.04.2024. 09:26:45", 0.0, 0.0, 0, 5000)
+        )
+    }
+
+    fun getAllRoutesMock(): List<Route> {
+        return listOf(
+            Route(0, 350, 400.0, 1000.0, "05.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(1, 350, 400.0, 2000.0, "06.04.2024. 09:26:45", 0.0, 0.0, 0, 500),
+            Route(2, 350, 400.0, 3000.0, "07.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(3, 350, 400.0, 4000.0, "08.04.2024. 09:26:45", 0.0, 0.0, 0, 1000),
+            Route(4, 350, 400.0, 3000.0, "05.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(5, 350, 400.0, 9000.0, "06.04.2024. 09:26:45", 0.0, 0.0, 0, 3500),
+            Route(6, 350, 400.0, 3000.0, "07.04.2024. 09:26:45", 0.0, 0.0, 0, 2000),
+            Route(7, 350, 400.0, 5000.0, "08.04.2024. 09:26:45", 0.0, 0.0, 0, 5000)
+        )
     }
 
     override suspend fun deleteNodesByRouteId(id: Long) {
@@ -69,6 +92,10 @@ class MockRepo : GgRepository {
         return MutableStateFlow(listOf())
     }
 
+    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
+        return MutableStateFlow(Route(0, 0, 0.0, 0.0, "", 0.0, 0.0, 0, 2000))
+    }
+
     override suspend fun insertUser(user: User): Long {
         return 0L
     }
@@ -91,7 +118,27 @@ class MockRepo : GgRepository {
         )
     }
 
-    override suspend fun getRouteByIdFlow(id: Long): Flow<Route> {
-        return MutableStateFlow(Route(0, 0, 0.0, 0.0, "", 0.0, 0.0, 0, 2000))
+    override fun getAllUsersFlow(): Flow<List<User>> {
+        return MutableStateFlow(listOf())
+    }
+
+    override fun initCurrentTracking(id: Long) {
+
+    }
+
+    override fun updateCurrentTrackingTime(time: Long) {
+
+    }
+
+    override fun updateCurrentTrackingExercise(exercise: Int) {
+
+    }
+
+    override fun getCurrentTracking(): CurrentTracking {
+        return CurrentTracking()
+    }
+
+    override fun updateCurrentTrackingDistance(distance: Double) {
+
     }
 }

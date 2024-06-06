@@ -1,14 +1,16 @@
 package com.hyperether.getgoing_kmp.android.presentation.ui.components
 
-import androidx.compose.foundation.layout.defaultMinSize
+import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -17,34 +19,40 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hyperether.getgoing_kmp.android.R
+import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
 
 @Composable
-fun ButtonTextIcon(text: String, icon: ImageVector? = null, click: () -> Unit = {}) {
-    TextButton(
-        onClick = { click() }, modifier = Modifier
-            .defaultMinSize(1.dp)
-            .padding(1.dp)
+fun LinkWithIcon(text: String, icon: ImageVector? = null, click: () -> Unit = {}) {
+    Row(
+        Modifier.clickable { click() },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = text,
             style = TextStyle.Default.copy(
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 18.sp,
                 color = MaterialTheme.colorScheme.primary
             )
         )
         Icon(
             imageVector = icon ?: Icons.Filled.KeyboardArrowRight,
             contentDescription = "Button icon",
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(start = 8.dp)
         )
     }
 }
@@ -72,8 +80,10 @@ fun PlayButton(isRunning: Boolean = false, click: () -> Unit) {
             .padding(1.dp)
     ) {
         Icon(
-            modifier = Modifier.size(100.dp),
-            imageVector = if (isRunning) Icons.Filled.Clear else Icons.Filled.PlayArrow,
+            modifier = Modifier.size(50.dp),
+            painter = if (isRunning) painterResource(id = R.drawable.ic_pouse) else painterResource(
+                id = R.drawable.ic_play
+            ),
             contentDescription = "Play button",
             tint = MaterialTheme.colorScheme.primary
         )
@@ -115,5 +125,28 @@ fun DismissButton(onClick: () -> Unit) {
         }
     ) {
         Text("Cancel")
+    }
+}
+
+@SuppressLint("ModifierFactoryUnreferencedReceiver")
+inline fun Modifier.noRippleClickable(
+    crossinline onClick: () -> Unit
+): Modifier = composed {
+    clickable(
+        indication = null,
+        interactionSource = remember { MutableInteractionSource() }) {
+        onClick()
+    }
+}
+
+@Preview
+@Composable
+private fun ButtonsPreview() {
+    GetgoingkmpTheme {
+        Column {
+            PlayButton {
+
+            }
+        }
     }
 }

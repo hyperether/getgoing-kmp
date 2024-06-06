@@ -14,10 +14,34 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun BoldLargeText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+fun BoldMediumText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
     Text(
         text = text,
-        style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        style = TextStyle.Default.copy(fontWeight = FontWeight.Bold, fontSize = 20.sp)
+    )
+}
+
+@Composable
+fun MediumText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 20.sp)
+    )
+}
+
+@Composable
+fun RegularText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 16.sp)
+    )
+}
+
+@Composable
+fun SmallText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 12.sp)
     )
 }
 

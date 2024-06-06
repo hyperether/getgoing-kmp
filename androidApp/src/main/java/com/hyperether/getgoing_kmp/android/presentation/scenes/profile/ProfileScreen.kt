@@ -27,7 +27,17 @@ import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.component
 import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.components.EditWeightDialog
 import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.components.ProfileDataItem
 import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.components.ProfileTotalItem
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.formatAge
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.formatGender
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.formatHeight
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.formatTotalKcal
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.formatTotalKm
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.formatWeight
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.getUserAge
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.getUserGender
 import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.getUserGenderIcon
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.getUserHeight
+import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.util.ProfileUtil.getUserWeight
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.AppToolbar
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.HeadlineText
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
@@ -43,12 +53,14 @@ fun ProfileScreen(
     var currentDialog by remember { mutableStateOf(DialogType.None) }
 
     LaunchedEffect(key1 = userId) {
-        viewModel.fetchUserById(userId)
+        if (userId != 0L) {
+            viewModel.fetchUserById(userId)
+        }
     }
 
     EditGenderDialog(
         showDialog = currentDialog == DialogType.GenderDialog,
-        currentGender = user?.gender,
+        currentGender = getUserGender(user?.gender),
         onDismiss = {
             currentDialog = DialogType.None
         },
@@ -59,7 +71,7 @@ fun ProfileScreen(
 
     EditAgeDialog(
         showDialog = currentDialog == DialogType.AgeDialog,
-        currentAge = user?.age ?: 1,
+        currentAge = getUserAge(user?.age),
         onDismiss = {
             currentDialog = DialogType.None
         },
@@ -70,7 +82,7 @@ fun ProfileScreen(
 
     EditHeightDialog(
         showDialog = currentDialog == DialogType.HeightDialog,
-        currentHeight = user?.height ?: 110,
+        currentHeight = getUserHeight(user?.height),
         onDismiss = {
             currentDialog = DialogType.None
         },
@@ -81,7 +93,7 @@ fun ProfileScreen(
 
     EditWeightDialog(
         showDialog = currentDialog == DialogType.WeightDialog,
-        currentWeight = user?.weight ?: 40,
+        currentWeight = getUserWeight(user?.weight),
         onDismiss = {
             currentDialog = DialogType.None
         },
@@ -116,13 +128,13 @@ fun ProfileScreen(
             ) {
                 ProfileDataItem(
                     iconId = getUserGenderIcon(user?.gender),
-                    text = user?.gender?.name ?: "",
+                    text = formatGender(user?.gender),
                     onClick = {
                         currentDialog = DialogType.GenderDialog
                     })
                 ProfileDataItem(
                     iconId = R.drawable.ic_birthday_cake,
-                    text = "${user?.age} years",
+                    text = formatAge(user?.age),
                     onClick = {
                         currentDialog = DialogType.AgeDialog
                     })
@@ -136,13 +148,13 @@ fun ProfileScreen(
             ) {
                 ProfileDataItem(
                     iconId = R.drawable.ic_measure_tape,
-                    text = "${user?.height}cm",
+                    text = formatHeight(user?.height),
                     onClick = {
                         currentDialog = DialogType.HeightDialog
                     })
                 ProfileDataItem(
                     iconId = R.drawable.ic_scale,
-                    text = "${user?.weight}kg",
+                    text = formatWeight(user?.weight),
                     onClick = {
                         currentDialog = DialogType.WeightDialog
                     })
@@ -162,11 +174,11 @@ fun ProfileScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             ProfileTotalItem(
-                text = "${user?.totalKm} km",
+                text = formatTotalKm(user?.totalKm),
                 icon = R.drawable.ic_road
             )
             ProfileTotalItem(
-                text = "${user?.totalKcal} kcal",
+                text = formatTotalKcal(user?.totalKcal),
                 icon = R.drawable.ic_calories
             )
         }
