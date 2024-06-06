@@ -256,6 +256,12 @@ class TrackingViewModel(
         selectedExercise.value = ExerciseType.entries.find { it.id == id }?.value ?: ""
         repository.updateCurrentTrackingExercise(id)
     }
+
+    fun clearData() {
+        repository.initCurrentTracking(-1)
+        repository.updateCurrentTrackingTime(0)
+        repository.updateCurrentTrackingDistance(0.0)
+    }
 }
 
 data class NodeLists(

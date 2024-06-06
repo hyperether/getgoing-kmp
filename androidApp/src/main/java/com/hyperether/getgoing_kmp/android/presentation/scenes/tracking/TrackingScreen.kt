@@ -1,5 +1,7 @@
 package com.hyperether.getgoing_kmp.android.presentation.scenes.tracking
 
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,9 +44,25 @@ fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
         }
     }
 
+    BackHandler {
+        if (viewModel.trackingStarted.value) {
+            Toast.makeText(context, "Stop tracking first", Toast.LENGTH_LONG).show()
+        } else {
+            viewModel.clearData()
+            onBack()
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState()
-        AppToolbarDynamic(title = viewModel.selectedExercise.value) { onBack() }
+        AppToolbarDynamic(title = viewModel.selectedExercise.value) {
+            if (viewModel.trackingStarted.value) {
+                Toast.makeText(context, "Stop tracking first", Toast.LENGTH_LONG).show()
+            } else {
+                viewModel.clearData()
+                onBack()
+            }
+        }
         Box(
             Modifier
                 .weight(1f)
