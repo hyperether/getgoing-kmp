@@ -30,6 +30,22 @@ fun MediumText(text: String, color: Color = MaterialTheme.colorScheme.onBackgrou
 }
 
 @Composable
+fun RegularText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 16.sp)
+    )
+}
+
+@Composable
+fun SmallText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+    Text(
+        text = text,
+        style = TextStyle.Default.copy(fontSize = 12.sp)
+    )
+}
+
+@Composable
 fun LargeText(text: String, color: Color = MaterialTheme.colorScheme.tertiary) {
     Text(
         text = text,
