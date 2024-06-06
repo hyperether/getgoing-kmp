@@ -78,7 +78,7 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(
-            route = Screen.TrackingScreen.route,
+            route = Screen.DetailsScreen.route,
             arguments = listOf(navArgument(name = "activityId") {
                 nullable = true
                 defaultValue = null
