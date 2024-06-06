@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.model.CameraPosition
@@ -24,14 +26,21 @@ import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.AppToolbarDynamic
-import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldLargeText
+import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldMediumText
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.CirceButtonContainer
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.GGShape
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.PlayButton
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
+import com.hyperether.getgoing_kmp.android.util.ServiceUtil
 
 @Composable
 fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        if (ServiceUtil.isServiceActive(context)) {
+            viewModel.continueTracking()
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState()
@@ -90,11 +99,11 @@ fun TrackingScreen(viewModel: TrackingViewModel, onBack: () -> Unit = {}) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(150.dp),
+                .height(120.dp),
             verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            BoldLargeText(text = viewModel.distanceState.value)
+            BoldMediumText(text = viewModel.distanceState.value)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,

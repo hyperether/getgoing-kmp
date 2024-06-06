@@ -5,5 +5,5 @@ sealed class Screen(val route: String) {
     object GetGoingScreen : Screen("getgoing_route")
     object ProfileScreen : Screen("profile_route")
     object ShowDataScreen : Screen("data_route")
-    object TrackingScreen : Screen("tracking_route/{id}")
+    object TrackingScreen : Screen("tracking_route?id={id}")
 }
