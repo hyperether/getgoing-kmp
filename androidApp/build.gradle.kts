@@ -69,11 +69,8 @@ dependencies {
     }
     testImplementation(libs.junit)
     androidTestImplementation(libs.testRunner)
-    androidTestImplementation(libs.espressoCore)
     implementation(libs.lifecycleExtensions)
     implementation(libs.material)
-    implementation(libs.lifecycleCompiler)
-    implementation(libs.lifecycleLivedataKtx)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.navigation.compose)
     implementation(libs.compose.maps)

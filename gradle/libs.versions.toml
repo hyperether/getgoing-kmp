@@ -7,14 +7,11 @@ compose-material3 = "1.1.2"
 androidx-activityCompose = "1.8.0"
 coreKtx = "1.9.0"
 location = "20.0.0"
-lifecycleCompiler = "2.6.0-alpha02"
 junit = "4.13.2"
 testRunner = "1.4.0"
-espresso = "3.4.0"
 lifecycleExtensions = "2.2.0"
 material = "1.8.0-alpha01"
 hyper-toolbox = "1.0.17"
-lifecycleLivedataKtx = "2.6.0-alpha02"
 sqlite = "2.5.0-SNAPSHOT"
 androidx-room = "2.7.0-alpha01"
 ksp = "1.9.23-1.0.19"
@@ -24,7 +21,6 @@ skie = "0.6.2"
 spotless = "6.19.0"
 atomicfu = "0.23.1"
 dataStoreVersion = "1.1.1"
-google-maps = "18.0.2"
 lifecycleRuntimeKtx = "2.8.0"
 composeBom = "2023.08.00"
 navigationCompose = "2.6.0"
@@ -43,11 +39,8 @@ location = { group = "com.google.android.gms", name = "play-services-location", 
 androidToolbox = { group = "com.hyperether", name = "android-toolbox", version.ref = "hyper-toolbox" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 testRunner = { group = "androidx.test", name = "runner", version.ref = "testRunner" }
-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
 lifecycleExtensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycleExtensions" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-lifecycleCompiler = { group = "androidx.lifecycle", name = "lifecycle-compiler", version.ref = "lifecycleCompiler" }
-lifecycleLivedataKtx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" } # Add this line
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidx-room" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "androidx-room" }
 androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "dataStoreVersion" }
