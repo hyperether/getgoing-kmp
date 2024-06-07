@@ -62,11 +62,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.appcompat)
     implementation(libs.coreKtx)
-    implementation(libs.maps)
     implementation(libs.location)
-    implementation(libs.mpAndroidChart)
     implementation(libs.navigationFragmentKtx)
     implementation(libs.navigationUiKtx)
     implementation(libs.androidToolbox) {
