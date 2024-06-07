@@ -64,8 +64,6 @@ dependencies {
 
     implementation(libs.coreKtx)
     implementation(libs.location)
-    implementation(libs.navigationFragmentKtx)
-    implementation(libs.navigationUiKtx)
     implementation(libs.androidToolbox) {
         isTransitive = true
     }
@@ -74,12 +72,8 @@ dependencies {
     androidTestImplementation(libs.espressoCore)
     implementation(libs.lifecycleExtensions)
     implementation(libs.material)
-    implementation(libs.constraintlayout)
-    implementation(libs.circleProgressBar)
     implementation(libs.lifecycleCompiler)
     implementation(libs.lifecycleLivedataKtx)
-    implementation(libs.mpAndroidChart)
-    implementation(libs.google.maps)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.navigation.compose)
     implementation(libs.compose.maps)
