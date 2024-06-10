@@ -86,8 +86,10 @@ fun GetGoingScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         BoldMediumText(text = stringResource(R.string.last_exercise))
-                        LinkWithIcon("View all", Icons.Default.KeyboardArrowRight)
+                        var userId= getUserId(viewModel.user)
+                        LinkWithIcon("View all",Icons.Default.KeyboardArrowRight, click = {navigateTo("${Screen.ActivitiesScreen.route}/${userId}")})
                     }
+
 
                     LastExercise(
                         viewModel.lastRouteSelectedExercise.value,

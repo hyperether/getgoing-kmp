@@ -33,7 +33,8 @@ fun MediumText(text: String, color: Color = MaterialTheme.colorScheme.onBackgrou
 fun RegularText(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
     Text(
         text = text,
-        style = TextStyle.Default.copy(fontSize = 16.sp)
+        style = TextStyle.Default.copy(fontSize = 16.sp),
+        color= color
     )
 }
 

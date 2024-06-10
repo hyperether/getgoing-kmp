@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
@@ -29,14 +27,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hyperether.getgoing_kmp.android.R
 import com.hyperether.getgoing_kmp.android.presentation.mock.MockRepo
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.AppToolbar
-import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldLargeText
+import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldMediumText
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.PrimaryButton
+import com.hyperether.getgoing_kmp.android.presentation.ui.components.RegularText
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
 import com.hyperether.getgoing_kmp.android.util.TimeUtils
 import com.hyperether.getgoing_kmp.repository.room.Route
@@ -55,8 +55,6 @@ fun ActivitiesScreen(userId:Long,
     val meters = viewModel.meters
     val calories = viewModel.calories.value
     val routes = viewModel.routeList.value
-
-    val walkedValue = viewModel.walkedValue.value
 
     Column(
         modifier = Modifier
@@ -119,10 +117,17 @@ fun ActivityProgress(activityName: String, activityID:Int, routes: List<Route>,g
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(activityName, modifier = Modifier.weight(1f), style = MaterialTheme.typography.bodyLarge)
-        Text(activitySum.toString()+" km", style = MaterialTheme.typography.bodyMedium)
+        Column(
+            horizontalAlignment = Alignment.Start){
+            RegularText(text =activityName )
+        }
+        Column(
+            horizontalAlignment = Alignment.End){
+            RegularText(text =activitySum.toString()+" km" )
+
+        }
     }
     Divider()
     LinearProgressIndicator(
@@ -135,6 +140,7 @@ fun ActivityProgress(activityName: String, activityID:Int, routes: List<Route>,g
 @Composable
 fun GoalSection(meters: MutableState<Int>, calories: Int, viewModel: ActivitiesViewModel) {
     var goalValue by remember { mutableStateOf(GoalValues.LOW) }
+    goalValue=determineGoalLabel(meters.value)
 
     Column(modifier = Modifier.fillMaxWidth()) {
 
@@ -144,15 +150,15 @@ fun GoalSection(meters: MutableState<Int>, calories: Int, viewModel: ActivitiesV
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                BoldLargeText(stringResource(R.string.my_goal_lbl))
+                BoldMediumText(stringResource(R.string.my_goal_lbl))
                 Spacer(modifier = Modifier.height(8.dp))
             }
 
 
         }
         Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End) {
-            Text("${meters.value} meters", style = MaterialTheme.typography.bodyLarge)
-            Text("About $calories kcal", style = MaterialTheme.typography.bodyLarge)
+            RegularText("${meters.value} meters")
+            RegularText("About $calories kcal")
         }
         Slider(
             value = meters.value.toFloat(),
@@ -175,20 +181,29 @@ fun GoalSection(meters: MutableState<Int>, calories: Int, viewModel: ActivitiesV
             verticalAlignment = Alignment.CenterVertically
         ) {
             GoalLabel(GoalValues.LOW,goalValue)
-            Text("|")
+            RegularText("|")
             GoalLabel(GoalValues.MEDIUM,goalValue)
-            Text("|")
+            RegularText("|")
             GoalLabel(GoalValues.HIGH,goalValue)
         }
     }
 }
 
+private fun determineGoalLabel(value: Int): GoalValues {
+    if (value < 3333) {
+        return GoalValues.LOW
+    } else if (value < 6666) {
+        return GoalValues.MEDIUM
+    } else {
+        return GoalValues.HIGH
+    }
+}
+
 @Composable
 fun GoalLabel(goalValue: GoalValues,currentGoal: GoalValues) {
-    Text(
+    RegularText(
         text = goalValue.name,
-        color = if (currentGoal == goalValue) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.tertiary,
-        style = MaterialTheme.typography.bodyLarge
+        color =if (currentGoal==goalValue) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onBackground,
     )
 }
 @Composable
@@ -203,33 +218,31 @@ fun ActivityTimeEstimations(meters: Int) {
     {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Star, contentDescription = "Walking")
+            ActivityIcon(R.drawable.ic_walking_gray,"Walking")
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                "${TimeUtils.getTimeEstimates(meters)[0]} min",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            RegularText(text ="${TimeUtils.getTimeEstimates(meters)[0]} min" )
         }
         Text(text = "or")
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Star, contentDescription = "Running")
+            ActivityIcon(R.drawable.ic_light_run,"Running")
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                "${TimeUtils.getTimeEstimates(meters)[1]} min",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            RegularText(text = "${TimeUtils.getTimeEstimates(meters)[1]} min")
         }
         Text(text = "or")
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.Star, contentDescription = "Cycling")
+            ActivityIcon(R.drawable.ic_light_cycling,"Cycling")
             Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                "${TimeUtils.getTimeEstimates(meters)[2]} min",
-                style = MaterialTheme.typography.bodyMedium
-            )
+            RegularText(text = "${TimeUtils.getTimeEstimates(meters)[2]} min")
         }
 
     }
+}
+
+@Composable
+fun ActivityIcon(drawable: Int, description: String) {
+    Icon(modifier = Modifier
+        .width(20.dp)
+        .height(24.dp), painter = painterResource(id = drawable) , contentDescription = description)
 }
 
 @Preview(showBackground = true, showSystemUi = true)
