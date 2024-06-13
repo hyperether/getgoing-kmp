@@ -38,6 +38,7 @@ import com.hyperether.getgoing_kmp.android.presentation.ui.components.BoldMedium
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.PrimaryButton
 import com.hyperether.getgoing_kmp.android.presentation.ui.components.RegularText
 import com.hyperether.getgoing_kmp.android.presentation.ui.theme.GetgoingkmpTheme
+import com.hyperether.getgoing_kmp.android.util.ExerciseType
 import com.hyperether.getgoing_kmp.android.util.TimeUtils
 import com.hyperether.getgoing_kmp.repository.room.Route
 
@@ -73,9 +74,9 @@ fun ActivitiesScreen(userId:Long,
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        ActivityProgress(activityName = stringResource(R.string.walking_lbl),Activities.WALKING.value,routes,viewModel.meters.value)
-        ActivityProgress(activityName = stringResource(R.string.running_lbl),Activities.RUNNING.value,routes,viewModel.meters.value)
-        ActivityProgress(activityName = stringResource(R.string.cycling_lbl),Activities.CYCLING.value,routes,viewModel.meters.value)
+        ActivityProgress(activityName = stringResource(R.string.walking_lbl),ExerciseType.WALKING.id,routes,viewModel.meters.value)
+        ActivityProgress(activityName = stringResource(R.string.running_lbl),ExerciseType.RUNNING.id,routes,viewModel.meters.value)
+        ActivityProgress(activityName = stringResource(R.string.cycling_lbl),ExerciseType.CYCLING.id,routes,viewModel.meters.value)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -257,9 +258,4 @@ enum class GoalValues {
     LOW,
     MEDIUM,
     HIGH
-}
-enum class Activities(val value: Int){
-    WALKING(value=1),
-    RUNNING(value = 2),
-    CYCLING(value =3)
 }
