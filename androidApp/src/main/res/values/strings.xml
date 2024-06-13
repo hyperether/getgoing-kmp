@@ -9,6 +9,13 @@
     <string name="my_data">MY DATA</string>
     <string name="total_activities">TOTAL ACTIVITIES</string>
     <string name="duration_distance_notification_text">Duration: %1$s\nDistance: %2$s</string>
+    <string name="my_activities">My activities</string>
+    <string name="save_changes_btn">Save changes</string>
+    <string name="changes_saved_toast">Changes saved</string>
+    <string name="walking_lbl">Walking</string>
+    <string name="running_lbl">Running</string>
+    <string name="cycling_lbl">Cycling</string>
+    <string name="my_goal_lbl">MY GOAL</string>
 </resources>
 
 

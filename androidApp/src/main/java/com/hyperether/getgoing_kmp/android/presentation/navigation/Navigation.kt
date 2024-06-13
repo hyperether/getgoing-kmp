@@ -12,6 +12,8 @@ import androidx.navigation.navArgument
 import com.hyperether.getgoing_kmp.android.presentation.navigation.Arguments.USER_ID
 import com.hyperether.getgoing_kmp.android.presentation.scenes.details.DetailsScreen
 import com.hyperether.getgoing_kmp.android.presentation.scenes.details.DetailsViewModel
+import com.hyperether.getgoing_kmp.android.presentation.scenes.activities.ActivitiesScreen
+import com.hyperether.getgoing_kmp.android.presentation.scenes.activities.ActivitiesViewModel
 import com.hyperether.getgoing_kmp.android.presentation.scenes.getgoing.GetGoingScreen
 import com.hyperether.getgoing_kmp.android.presentation.scenes.getgoing.GetGoingViewModel
 import com.hyperether.getgoing_kmp.android.presentation.scenes.profile.ProfileScreen
@@ -94,5 +96,15 @@ fun NavGraph(navController: NavHostController) {
                 navController.navigateUp()
             }
         }
+
+        composable(
+            route = "${Screen.ActivitiesScreen.route}/{$USER_ID}",
+            arguments = listOf(navArgument(USER_ID) { type = NavType.LongType })
+        ) {backStackEntry->
+            val userId = backStackEntry.arguments?.getLong(USER_ID)
+            val viewModel: ActivitiesViewModel = viewModel()
+            ActivitiesScreen(userId = userId!!,viewModel=viewModel) { navController.navigateUp() }
+        }
+
     }
 }
